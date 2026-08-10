@@ -1,0 +1,791 @@
+<title>Clean Shopper — Design Tokens</title>
+<style>
+  :root {
+    --page-bg: #FBF6EC;
+    --panel-bg: #FFFDF8;
+    --ink: #2E3B26;
+    --ink-soft: #5B6650;
+    --muted: #6E6448;
+    --border: #E4DBC8;
+    --border-strong: #D3C6A9;
+    --accent: #E8B34A;
+    --accent-soft: #F6E6C4;
+    --code-bg: #F3EDE0;
+    --focus-ring: var(--ink);
+
+    --clean: #52713F;
+    --clean-bg: #EEF2E4;
+    --caution: #7E5720;
+    --caution-bg: #F7EEDC;
+    --avoid: #8F452F;
+    --avoid-bg: #F5E7DF;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page-bg: #1B1712;
+      --panel-bg: #241F18;
+      --ink: #F1E9D8;
+      --ink-soft: #C9BEA6;
+      --muted: #A79A7C;
+      --border: #382F23;
+      --border-strong: #4A3F2F;
+      --accent: #E8B34A;
+      --accent-soft: #3B2E17;
+      --code-bg: #221C15;
+      --clean: #8FAE79;
+      --clean-bg: #263420;
+      --caution: #D9A75B;
+      --caution-bg: #3A2C15;
+      --avoid: #D68666;
+      --avoid-bg: #3A241B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #1B1712;
+    --panel-bg: #241F18;
+    --ink: #F1E9D8;
+    --ink-soft: #C9BEA6;
+    --muted: #A79A7C;
+    --border: #382F23;
+    --border-strong: #4A3F2F;
+    --accent: #E8B34A;
+    --accent-soft: #3B2E17;
+    --code-bg: #221C15;
+    --clean: #8FAE79;
+    --clean-bg: #263420;
+    --caution: #D9A75B;
+    --caution-bg: #3A2C15;
+    --avoid: #D68666;
+    --avoid-bg: #3A241B;
+  }
+  :root[data-theme="light"] {
+    --page-bg: #FBF6EC;
+    --panel-bg: #FFFDF8;
+    --ink: #2E3B26;
+    --ink-soft: #5B6650;
+    --muted: #8B8064;
+    --border: #E4DBC8;
+    --border-strong: #D3C6A9;
+    --accent: #E8B34A;
+    --accent-soft: #F6E6C4;
+    --code-bg: #F3EDE0;
+    --clean: #52713F;
+    --clean-bg: #EEF2E4;
+    --caution: #93672A;
+    --caution-bg: #F7EEDC;
+    --avoid: #A6543D;
+    --avoid-bg: #F5E7DF;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .serif {
+    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  }
+
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 72px 32px 140px;
+  }
+
+  header.masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    padding-bottom: 32px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .masthead .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .masthead .brand .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    transform: translateY(-2px);
+  }
+  .masthead h1 {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+  }
+  .masthead .meta {
+    font-size: 12.5px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+  }
+  .masthead .meta code {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    background: var(--code-bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .lede {
+    max-width: 62ch;
+    margin: 0 0 88px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .lede strong { color: var(--ink); font-weight: 500; }
+
+  section.block {
+    margin-bottom: 88px;
+  }
+
+  .block-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+  .block-head h2 {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0;
+    white-space: nowrap;
+  }
+  .block-head p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 48ch;
+    text-align: right;
+  }
+
+  /* ---- Color ---- */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 720px) {
+    .swatch-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .swatch {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--panel-bg);
+  }
+  .swatch .fill {
+    height: 84px;
+  }
+  .swatch .info {
+    padding: 14px 16px 16px;
+  }
+  .swatch .name {
+    font-size: 13.5px;
+    font-weight: 500;
+    margin: 0 0 3px;
+  }
+  .swatch .hex {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 0 0 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .swatch .role {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .verdict-panel {
+    margin-top: 24px;
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .verdict-panel .k {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+  .verdict-row {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .verdict-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 240px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 1000px;
+    font-size: 13.5px;
+    font-weight: 500;
+    width: fit-content;
+  }
+  .chip .swatch-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+  .chip.clean { background: var(--clean-bg); color: var(--clean); }
+  .chip.clean .swatch-dot { background: var(--clean); }
+  .chip.caution { background: var(--caution-bg); color: var(--caution); }
+  .chip.caution .swatch-dot { background: var(--caution); }
+  .chip.avoid { background: var(--avoid-bg); color: var(--avoid); }
+  .chip.avoid .swatch-dot { background: var(--avoid); }
+  .verdict-item p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  /* ---- Typography ---- */
+  .type-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+  }
+  .type-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .type-row .tag {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+    padding-top: 6px;
+  }
+  .type-row .tag .spec {
+    display: block;
+    margin-top: 5px;
+    color: var(--border-strong);
+    font-size: 10.5px;
+  }
+  .type-row .sample {
+    color: var(--ink);
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .display   { font-size: 46px; line-height: 130%; letter-spacing: normal; font-weight: 400; }
+  .h1-sample { font-size: 38px; line-height: 130%; letter-spacing: normal; font-weight: 400; }
+  .h2-sample { font-size: 30px; line-height: 130%; letter-spacing: normal; font-weight: 400; }
+  .h3-sample { font-family: "Inter", system-ui, sans-serif; font-size: 23px; line-height: 130%; letter-spacing: -0.1px; font-weight: 500; }
+  .h4-sample { font-family: "Inter", system-ui, sans-serif; font-size: 19px; line-height: 130%; letter-spacing: -0.1px; font-weight: 500; }
+  .body-sample { font-family: "Inter", system-ui, sans-serif; font-size: 16px; line-height: 165%; letter-spacing: normal; font-weight: 400; max-width: 52ch; }
+  .label-sample { font-family: "Inter", system-ui, sans-serif; font-size: 14px; line-height: 150%; letter-spacing: normal; font-weight: 500; }
+  .caption-sample { font-family: "Inter", system-ui, sans-serif; font-size: 12px; line-height: 150%; letter-spacing: 0.02em; font-weight: 400; color: var(--muted); text-transform: uppercase; }
+
+  /* ---- Spacing ---- */
+  .space-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .space-row {
+    display: grid;
+    grid-template-columns: 90px 60px 1fr;
+    align-items: center;
+    gap: 16px;
+    font-size: 12.5px;
+  }
+  .space-row .tag {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    color: var(--muted);
+  }
+  .space-row .val {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .space-row .bar {
+    height: 10px;
+    background: var(--accent);
+    border-radius: 3px;
+    opacity: 0.9;
+  }
+
+  /* ---- Radius ---- */
+  .radius-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 720px) {
+    .radius-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .radius-card {
+    text-align: center;
+  }
+  .radius-card .shape {
+    height: 76px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .radius-card .tag {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    display: block;
+  }
+  .radius-card .val {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ---- Elevation ---- */
+  .elev-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 720px) {
+    .elev-row { grid-template-columns: 1fr; }
+  }
+  .elev-card {
+    background: var(--panel-bg);
+    border-radius: 16px;
+    padding: 22px;
+    height: 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .elev-card.none { border: 1px solid var(--border); box-shadow: none; }
+  .elev-card.sm { border: 1px solid var(--border); box-shadow: 0px 6px 16px 0px rgba(46, 34, 18, 0.12); }
+  .elev-card.modal { border: 1px solid var(--border); box-shadow: 0px 8px 28px 0px rgba(46, 34, 18, 0.16); }
+  .elev-card .tag {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .elev-card .val {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+  }
+
+  /* ---- Component preview ---- */
+  .demo-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--page-bg);
+    border: none;
+    border-radius: 1000px;
+    padding: 15px 26px;
+    font-size: 15.5px;
+    font-weight: 500;
+    letter-spacing: normal;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 400ms cubic-bezier(0.2,0,0,1), background 400ms cubic-bezier(0.2,0,0,1);
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+  .link-secondary {
+    color: var(--ink);
+    font-size: 15.5px;
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-strong);
+    padding-bottom: 2px;
+    transition: border-color 400ms ease;
+  }
+  .link-secondary:hover { border-color: var(--ink); }
+  .link-secondary:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+  .input-demo {
+    background: transparent;
+    border: 2px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-size: 15.5px;
+    font-family: inherit;
+    color: var(--ink);
+    min-width: 240px;
+    transition: border-color 400ms ease;
+  }
+  .input-demo::placeholder { color: var(--muted); }
+  .input-demo:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-color: var(--focus-ring);
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* ---- Verdict card demo ---- */
+  .result-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .result-card .product {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0;
+  }
+  .result-card h3 {
+    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-weight: 400;
+    font-size: 26px;
+    margin: 0;
+    line-height: 1.3;
+  }
+  .result-card p.note {
+    margin: 4px 0 6px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+
+  footer.foot {
+    margin-top: 96px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 60ch;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    section.block, .lede, header.masthead {
+      animation: rise 700ms cubic-bezier(0.2,0,0,1) both;
+    }
+    header.masthead { animation-delay: 0ms; }
+    .lede { animation-delay: 60ms; }
+    section.block:nth-of-type(1) { animation-delay: 100ms; }
+    section.block:nth-of-type(2) { animation-delay: 160ms; }
+    section.block:nth-of-type(3) { animation-delay: 220ms; }
+    section.block:nth-of-type(4) { animation-delay: 280ms; }
+    section.block:nth-of-type(5) { animation-delay: 340ms; }
+    section.block:nth-of-type(6) { animation-delay: 400ms; }
+    section.block:nth-of-type(7) { animation-delay: 460ms; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1 class="serif">Clean Shopper — Design Tokens</h1>
+    </div>
+    <div class="meta">
+      foundation layer · inspired by <code>seed.com</code><br>
+      warmed and slowed down on purpose
+    </div>
+  </header>
+
+  <p class="lede">Checking whether a product is safe can feel anxious if the interface amplifies it. This system is tuned to stay <strong>calm under the specific moment it exists for</strong> — a warm, buttery base instead of clinical white, a terracotta "avoid" instead of alarm red, loose type instead of tight tracking, and motion that settles rather than snaps.</p>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Color</h2>
+      <p>One soft ink, one warm base, one honey accent used sparingly — and a verdict system that reads as guidance, not a warning light.</p>
+    </div>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="fill" style="background:#2E3B26"></div>
+        <div class="info">
+          <p class="name">Ink</p>
+          <p class="hex">#2E3B26</p>
+          <p class="role">text, primary button — soft moss</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="fill" style="background:#FBF6EC; border-bottom:1px solid var(--border)"></div>
+        <div class="info">
+          <p class="name">Base</p>
+          <p class="hex">#FBF6EC</p>
+          <p class="role">page background — buttery cream</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="fill" style="background:#F3EDE0"></div>
+        <div class="info">
+          <p class="name">Surface</p>
+          <p class="hex">#F3EDE0</p>
+          <p class="role">card / secondary surface — warm oat</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="fill" style="background:#E8B34A"></div>
+        <div class="info">
+          <p class="name">Accent</p>
+          <p class="hex">#E8B34A</p>
+          <p class="role">badges, highlights, focus — honey</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="fill" style="background:#8B8064"></div>
+        <div class="info">
+          <p class="name">Muted</p>
+          <p class="hex">#8B8064</p>
+          <p class="role">secondary text — warm taupe</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="fill" style="background:#E4DBC8"></div>
+        <div class="info">
+          <p class="name">Border</p>
+          <p class="hex">#E4DBC8</p>
+          <p class="role">hairlines — warm sand</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="fill" style="background:#52713F"></div>
+        <div class="info">
+          <p class="name">Clean</p>
+          <p class="hex">#52713F</p>
+          <p class="role">"clean" verdict — soft sage</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="fill" style="background:#A6543D"></div>
+        <div class="info">
+          <p class="name">Avoid</p>
+          <p class="hex">#A6543D</p>
+          <p class="role">"avoid" verdict — clay, not red</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict-panel">
+      <p class="k">Verdict states, in context</p>
+      <div class="verdict-row">
+        <div class="verdict-item">
+          <span class="chip clean"><span class="swatch-dot"></span>Clean</span>
+          <p>Meets your saved standards — nothing more to check.</p>
+        </div>
+        <div class="verdict-item">
+          <span class="chip caution"><span class="swatch-dot"></span>Worth a closer look</span>
+          <p>Contains something you've flagged before. Not a stop sign — just worth reading.</p>
+        </div>
+        <div class="verdict-item">
+          <span class="chip avoid"><span class="swatch-dot"></span>Skip this one</span>
+          <p>Conflicts with a preference you've set. Stated plainly, without alarm color.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Typography</h2>
+      <p>A warm serif for headings, a humanist sans for body copy. Tracking loosened from Seed's tight negative values so the page reads unhurried.</p>
+    </div>
+    <div class="type-list">
+      <div class="type-row">
+        <div class="tag">display<span class="spec">serif / 46 / 130%</span></div>
+        <p class="sample display serif">A routine you can trust, at your own pace.</p>
+      </div>
+      <div class="type-row">
+        <div class="tag">h1<span class="spec">serif / 38 / 130%</span></div>
+        <p class="sample h1-sample serif">Search any product</p>
+      </div>
+      <div class="type-row">
+        <div class="tag">h2<span class="spec">serif / 30 / 130%</span></div>
+        <p class="sample h2-sample serif">Your saved library</p>
+      </div>
+      <div class="type-row">
+        <div class="tag">h3<span class="spec">sans / 23 / 500</span></div>
+        <p class="sample h3-sample">Ingredients you've flagged</p>
+      </div>
+      <div class="type-row">
+        <div class="tag">h4<span class="spec">sans / 19 / 500</span></div>
+        <p class="sample h4-sample">Certifications that matter to you</p>
+      </div>
+      <div class="type-row">
+        <div class="tag">body<span class="spec">sans / 16 / 165%</span></div>
+        <p class="sample body-sample">Take your time with this one. Nothing here expires — come back whenever you're ready to decide, and we'll remember what you asked us to watch for.</p>
+      </div>
+      <div class="type-row">
+        <div class="tag">label<span class="spec">sans / 14 / 150%</span></div>
+        <p class="sample label-sample">Add to shopping list</p>
+      </div>
+      <div class="type-row">
+        <div class="tag">caption<span class="spec">sans / 12 / 150%</span></div>
+        <p class="sample caption-sample">EWG Verified · Checked today</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Spacing</h2>
+      <p>8px rhythm, matching Seed's button/card ratios — used generously rather than tightly packed.</p>
+    </div>
+    <div class="space-list">
+      <div class="space-row"><span class="tag">space-1</span><span class="val">4px</span><div class="bar" style="width:4px"></div></div>
+      <div class="space-row"><span class="tag">space-2</span><span class="val">8px</span><div class="bar" style="width:8px"></div></div>
+      <div class="space-row"><span class="tag">space-3</span><span class="val">12px</span><div class="bar" style="width:12px"></div></div>
+      <div class="space-row"><span class="tag">space-4</span><span class="val">16px</span><div class="bar" style="width:16px"></div></div>
+      <div class="space-row"><span class="tag">space-5</span><span class="val">20px</span><div class="bar" style="width:20px"></div></div>
+      <div class="space-row"><span class="tag">space-6</span><span class="val">24px</span><div class="bar" style="width:24px"></div></div>
+      <div class="space-row"><span class="tag">space-8</span><span class="val">32px</span><div class="bar" style="width:32px"></div></div>
+      <div class="space-row"><span class="tag">space-10</span><span class="val">40px</span><div class="bar" style="width:40px"></div></div>
+      <div class="space-row"><span class="tag">space-12</span><span class="val">48px</span><div class="bar" style="width:48px"></div></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Radius</h2>
+      <p>Full pill for anything clickable, 16px for cards — soft edges throughout, nothing sharp.</p>
+    </div>
+    <div class="radius-grid">
+      <div class="radius-card">
+        <div class="shape" style="border-radius:1000px"></div>
+        <span class="tag">pill</span>
+        <span class="val">1000px</span>
+      </div>
+      <div class="radius-card">
+        <div class="shape" style="border-radius:16px"></div>
+        <span class="tag">card</span>
+        <span class="val">16px</span>
+      </div>
+      <div class="radius-card">
+        <div class="shape" style="border-radius:8px"></div>
+        <span class="tag">md</span>
+        <span class="val">8px</span>
+      </div>
+      <div class="radius-card">
+        <div class="shape" style="border-radius:32px"></div>
+        <span class="tag">lg</span>
+        <span class="val">32px</span>
+      </div>
+      <div class="radius-card">
+        <div class="shape" style="border-radius:50%"></div>
+        <span class="tag">full</span>
+        <span class="val">50%</span>
+      </div>
+      <div class="radius-card">
+        <div class="shape" style="border-radius:4px"></div>
+        <span class="tag">sm</span>
+        <span class="val">4px</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Elevation</h2>
+      <p>Flat by default. Shadow is warm-toned and diffuse — never a hard, cool drop shadow.</p>
+    </div>
+    <div class="elev-row">
+      <div class="elev-card none">
+        <span class="tag">shadow-none</span>
+        <span class="val">default — cards, buttons</span>
+      </div>
+      <div class="elev-card sm">
+        <span class="tag">shadow-sm</span>
+        <span class="val">0 6px 16px rgba(46,34,18,.12)</span>
+      </div>
+      <div class="elev-card modal">
+        <span class="tag">shadow-modal</span>
+        <span class="val">0 8px 28px rgba(46,34,18,.16)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Applied — a result</h2>
+      <p>The full system on the moment it was built for: a caution verdict, stated calmly.</p>
+    </div>
+    <div class="result-card">
+      <p class="product">Lavender Field All-Purpose Cleaner</p>
+      <h3>Worth a closer look before you buy this one.</h3>
+      <p class="note">It contains a fragrance blend you've asked us to flag in the past. That doesn't mean it's unsafe for everyone — just that it's the kind of thing you told us you'd want to know about. Take a look at the ingredient list below when you have a minute.</p>
+      <span class="chip caution" style="margin-top:6px"><span class="swatch-dot"></span>Worth a closer look</span>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Applied — interaction</h2>
+      <p>Tokens composed into the primary interactive elements.</p>
+    </div>
+    <div class="demo-panel">
+      <button class="btn-primary">Search products</button>
+      <a href="#" class="link-secondary">View library →</a>
+      <label class="visually-hidden" for="ingredient-demo">Ingredient to watch for</label>
+      <input class="input-demo" id="ingredient-demo" type="text" placeholder="Add an ingredient to watch for" />
+    </div>
+  </section>
+
+  <footer class="foot">
+    Source: docs/design-tokens.md — values adapted from seed.com's live computed styles, then warmed and loosened so the ingredient-checking moment feels like guidance rather than an alert.<br><br>
+    Checked against WCAG 2.1 AA via <code>/a11y-check</code>: all text/background pairs ≥4.5:1, chip text ≥5.5:1, focus rings ≥11:1 in both themes, verdicts carry text + icon (not color alone), demo input has a programmatic label.
+  </footer>
+
+</div>

@@ -1,0 +1,316 @@
+<title>Clean Shopper — Product Card Variants</title>
+<style>
+  :root {
+    --page-bg: #FBF6EC;
+    --panel-bg: #FFFDF8;
+    --ink: #2E3B26;
+    --ink-soft: #5B6650;
+    --muted: #6E6448;
+    --border: #E4DBC8;
+    --border-strong: #D3C6A9;
+    --accent: #E8B34A;
+    --surface: #F3EDE0;
+
+    --clean: #52713F;
+    --clean-bg: #EEF2E4;
+    --caution: #7E5720;
+    --caution-bg: #F7EEDC;
+    --avoid: #8F452F;
+    --avoid-bg: #F5E7DF;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page-bg: #1B1712;
+      --panel-bg: #241F18;
+      --ink: #F1E9D8;
+      --ink-soft: #C9BEA6;
+      --muted: #C2B38F;
+      --border: #382F23;
+      --border-strong: #4A3F2F;
+      --accent: #E8B34A;
+      --surface: #221C15;
+      --clean: #8FAE79;
+      --clean-bg: #263420;
+      --caution: #D9A75B;
+      --caution-bg: #3A2C15;
+      --avoid: #D68666;
+      --avoid-bg: #3A241B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #1B1712; --panel-bg: #241F18; --ink: #F1E9D8; --ink-soft: #C9BEA6;
+    --muted: #C2B38F; --border: #382F23; --border-strong: #4A3F2F; --accent: #E8B34A;
+    --surface: #221C15; --clean: #8FAE79; --clean-bg: #263420; --caution: #D9A75B;
+    --caution-bg: #3A2C15; --avoid: #D68666; --avoid-bg: #3A241B;
+  }
+  :root[data-theme="light"] {
+    --page-bg: #FBF6EC; --panel-bg: #FFFDF8; --ink: #2E3B26; --ink-soft: #5B6650;
+    --muted: #6E6448; --border: #E4DBC8; --border-strong: #D3C6A9; --accent: #E8B34A;
+    --surface: #F3EDE0; --clean: #52713F; --clean-bg: #EEF2E4; --caution: #7E5720;
+    --caution-bg: #F7EEDC; --avoid: #8F452F; --avoid-bg: #F5E7DF;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif; }
+
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 56px 32px 96px; }
+
+  header.masthead { margin-bottom: 12px; }
+  header.masthead .eyebrow {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); margin: 0 0 8px;
+  }
+  header.masthead h1 { font-size: 26px; font-weight: 400; margin: 0 0 10px; }
+  header.masthead p.lede {
+    max-width: 66ch; font-size: 15px; line-height: 1.65; color: var(--ink-soft); margin: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    margin-top: 44px;
+  }
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .variant {
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .variant-label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .variant-label .name {
+    font-size: 13px; font-weight: 500; color: var(--ink);
+  }
+  .variant-label .desc {
+    font-size: 12px; color: var(--muted); text-align: right; line-height: 1.5;
+  }
+
+  .stage {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 340px;
+  }
+
+  /* shared chip */
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 6px 13px; border-radius: 1000px; font-size: 12.5px; font-weight: 500;
+    width: fit-content;
+  }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .chip.caution { background: var(--caution-bg); color: var(--caution); }
+  .chip.caution .dot { background: var(--caution); }
+  .chip.clean { background: var(--clean-bg); color: var(--clean); }
+  .chip.clean .dot { background: var(--clean); }
+  .chip.avoid { background: var(--avoid-bg); color: var(--avoid); }
+  .chip.avoid .dot { background: var(--avoid); }
+
+  img.thumb { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---------- Variant A: photo-top / serif / pill chip / solid button ---------- */
+  .card-a {
+    width: 260px; background: var(--panel-bg); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden; box-shadow: 0 6px 16px rgba(46,34,18,0.10);
+  }
+  .card-a .img { height: 170px; background: var(--surface); overflow: hidden; }
+  .card-a .body { padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .card-a .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0; }
+  .card-a h2 { font-family: "Iowan Old Style", Georgia, serif; font-weight: 400; font-size: 19px; margin: 0; line-height: 1.3; }
+  .card-a .note { font-size: 13px; line-height: 1.55; color: var(--ink-soft); margin: 0; }
+  .card-a .cta {
+    margin-top: 2px; background: var(--ink); color: var(--page-bg); border: none;
+    border-radius: 1000px; padding: 10px 18px; font-size: 13px; font-weight: 500;
+    width: fit-content; cursor: pointer; font-family: inherit;
+  }
+  .card-a .cta:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ---------- Variant B: photo-left / large serif headline / dot label / text-link CTA ---------- */
+  .card-b {
+    width: 100%; max-width: 380px; display: flex; gap: 16px;
+    background: var(--panel-bg); border: 1px solid var(--border); border-radius: 16px;
+    padding: 14px; box-shadow: 0 6px 16px rgba(46,34,18,0.10);
+  }
+  .card-b .img { flex: 0 0 128px; height: 128px; border-radius: 10px; overflow: hidden; background: var(--surface); }
+  .card-b .body { display: flex; flex-direction: column; gap: 8px; justify-content: center; min-width: 0; }
+  .card-b .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0; }
+  .card-b h2 { font-family: "Iowan Old Style", Georgia, serif; font-weight: 400; font-size: 24px; margin: 0; line-height: 1.2; }
+  .card-b .tag-line { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; color: var(--caution); }
+  .card-b .tag-line .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--caution); flex-shrink: 0; }
+  .card-b .link {
+    margin-top: 2px; font-size: 13px; font-weight: 500; color: var(--ink);
+    text-decoration: none; border-bottom: 1px solid var(--border-strong); width: fit-content; padding-bottom: 1px;
+  }
+  .card-b .link:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ---------- Variant C: small thumbnail row / sans bold heading / stripe tag / ghost button ---------- */
+  .card-c {
+    width: 300px; background: var(--panel-bg); border: 1px solid var(--border);
+    border-left: 4px solid var(--caution); border-radius: 12px; padding: 18px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .card-c .row { display: flex; gap: 12px; align-items: center; }
+  .card-c .img { flex: 0 0 52px; width: 52px; height: 52px; border-radius: 10px; overflow: hidden; background: var(--surface); }
+  .card-c .row-text { min-width: 0; }
+  .card-c .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 2px; }
+  .card-c h2 { font-family: inherit; font-weight: 700; font-size: 15.5px; margin: 0; line-height: 1.3; letter-spacing: -0.1px; }
+  .card-c .tag-text { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--caution); margin: 0; }
+  .card-c .note { font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); margin: 0; }
+  .card-c .cta {
+    margin-top: 2px; background: transparent; color: var(--ink); border: 1.5px solid var(--border-strong);
+    border-radius: 1000px; padding: 8px 16px; font-size: 12.5px; font-weight: 600;
+    width: fit-content; cursor: pointer; font-family: inherit;
+  }
+  .card-c .cta:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ---------- Variant D: full-bleed photo overlay / scrim / corner badge / floating CTA ---------- */
+  .card-d {
+    width: 260px; height: 340px; border-radius: 18px; overflow: hidden; position: relative;
+    box-shadow: 0 10px 26px rgba(46,34,18,0.18);
+  }
+  .card-d img.thumb { position: absolute; inset: 0; }
+  .card-d .scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(20,15,8,0) 40%, rgba(20,15,8,0.78) 100%);
+  }
+  .card-d .badge {
+    position: absolute; top: 14px; right: 14px;
+    background: var(--caution-bg); color: var(--caution);
+    font-size: 11.5px; font-weight: 600; padding: 6px 12px; border-radius: 1000px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .card-d .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--caution); }
+  .card-d .content {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 18px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .card-d .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #EFE7D8; margin: 0; }
+  .card-d h2 { font-family: "Iowan Old Style", Georgia, serif; font-weight: 400; font-size: 19px; margin: 0; line-height: 1.3; color: #FFFDF8; }
+  .card-d .cta {
+    margin-top: 2px; background: #FFFDF8; color: var(--ink); border: none;
+    border-radius: 1000px; padding: 9px 16px; font-size: 12.5px; font-weight: 600;
+    width: fit-content; cursor: pointer; font-family: inherit;
+  }
+  .card-d .cta:focus-visible { outline: 2px solid #FFFDF8; outline-offset: 2px; }
+
+  footer.foot {
+    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border);
+    font-size: 12.5px; color: var(--muted); line-height: 1.6; max-width: 68ch;
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">Clean Shopper · Product Card</p>
+    <h1 class="serif">Four directions for the same card</h1>
+    <p class="lede">Same product, same verdict (caution), same data — varied on type treatment, information hierarchy, photo placement, tag styling, and CTA weight. All four use the existing warm token set; nothing here is a new palette.</p>
+  </header>
+
+  <div class="grid">
+
+    <div class="variant">
+      <div class="variant-label">
+        <span class="name">A — Photo-top</span>
+        <span class="desc">Serif heading · pill chip · solid CTA<br>(current baseline)</span>
+      </div>
+      <div class="stage">
+        <div class="card-a">
+          <div class="img"><img class="thumb" src="https://picsum.photos/seed/lavender-cleaner/400/400" alt="Bottle of lavender all-purpose cleaner"></div>
+          <div class="body">
+            <p class="brand">Meadow &amp; Co.</p>
+            <h2>Lavender Field All-Purpose Cleaner</h2>
+            <span class="chip caution"><span class="dot"></span>Worth a closer look</span>
+            <p class="note">Contains a fragrance blend you've asked us to flag in the past.</p>
+            <button class="cta" type="button">Add to shopping list</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant">
+      <div class="variant-label">
+        <span class="name">B — Photo-left, editorial</span>
+        <span class="desc">Larger serif headline · dot+label tag (no chip)<br>text-link CTA, lower visual weight</span>
+      </div>
+      <div class="stage">
+        <div class="card-b">
+          <div class="img"><img class="thumb" src="https://picsum.photos/seed/lavender-cleaner/400/400" alt="Bottle of lavender all-purpose cleaner"></div>
+          <div class="body">
+            <p class="brand">Meadow &amp; Co.</p>
+            <h2>Lavender Field All-Purpose Cleaner</h2>
+            <span class="tag-line"><span class="dot"></span>Worth a closer look</span>
+            <a href="#" class="link">Add to list →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant">
+      <div class="variant-label">
+        <span class="name">C — Compact, scannable</span>
+        <span class="desc">Sans bold heading · colored border stripe as tag<br>ghost (outline) CTA</span>
+      </div>
+      <div class="stage">
+        <div class="card-c">
+          <div class="row">
+            <div class="img"><img class="thumb" src="https://picsum.photos/seed/lavender-cleaner/400/400" alt="Bottle of lavender all-purpose cleaner"></div>
+            <div class="row-text">
+              <p class="brand">Meadow &amp; Co.</p>
+              <h2>Lavender Field All-Purpose Cleaner</h2>
+            </div>
+          </div>
+          <p class="tag-text">Worth a closer look</p>
+          <p class="note">Contains a fragrance blend you've asked us to flag in the past.</p>
+          <button class="cta" type="button">Add to list</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant">
+      <div class="variant-label">
+        <span class="name">D — Full-bleed overlay</span>
+        <span class="desc">Photo as background, scrim + white text<br>corner badge tag, CTA floats over image</span>
+      </div>
+      <div class="stage">
+        <div class="card-d">
+          <img class="thumb" src="https://picsum.photos/seed/lavender-cleaner/400/400" alt="Bottle of lavender all-purpose cleaner">
+          <div class="scrim"></div>
+          <span class="badge"><span class="dot"></span>Worth a closer look</span>
+          <div class="content">
+            <p class="brand">Meadow &amp; Co.</p>
+            <h2>Lavender Field All-Purpose Cleaner</h2>
+            <button class="cta" type="button">Add to shopping list</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="foot">
+    All four keep the caution verdict legible as text, not color alone, and every CTA has a visible focus state. Source product: Lavender Field All-Purpose Cleaner, held constant across variants so the comparison is about layout, not content.
+  </footer>
+</div>

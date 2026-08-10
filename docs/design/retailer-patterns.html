@@ -1,0 +1,261 @@
+<title>Clean Shopper — Retailer Pattern Reference</title>
+<style>
+  :root {
+    --page-bg: #FBF6EC; --panel-bg: #FFFDF8; --ink: #2E3B26; --ink-soft: #5B6650;
+    --muted: #6E6448; --border: #E4DBC8; --border-strong: #D3C6A9; --accent: #E8B34A;
+    --surface: #F3EDE0;
+    --clean: #52713F; --clean-bg: #EEF2E4;
+    --caution: #7E5720; --caution-bg: #F7EEDC;
+    --avoid: #8F452F; --avoid-bg: #F5E7DF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page-bg: #1B1712; --panel-bg: #241F18; --ink: #F1E9D8; --ink-soft: #C9BEA6;
+      --muted: #C2B38F; --border: #382F23; --border-strong: #4A3F2F; --accent: #E8B34A;
+      --surface: #221C15; --clean: #8FAE79; --clean-bg: #263420; --caution: #D9A75B;
+      --caution-bg: #3A2C15; --avoid: #D68666; --avoid-bg: #3A241B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #1B1712; --panel-bg: #241F18; --ink: #F1E9D8; --ink-soft: #C9BEA6;
+    --muted: #C2B38F; --border: #382F23; --border-strong: #4A3F2F; --accent: #E8B34A;
+    --surface: #221C15; --clean: #8FAE79; --clean-bg: #263420; --caution: #D9A75B;
+    --caution-bg: #3A2C15; --avoid: #D68666; --avoid-bg: #3A241B;
+  }
+  :root[data-theme="light"] {
+    --page-bg: #FBF6EC; --panel-bg: #FFFDF8; --ink: #2E3B26; --ink-soft: #5B6650;
+    --muted: #6E6448; --border: #E4DBC8; --border-strong: #D3C6A9; --accent: #E8B34A;
+    --surface: #F3EDE0; --clean: #52713F; --clean-bg: #EEF2E4; --caution: #7E5720;
+    --caution-bg: #F7EEDC; --avoid: #8F452F; --avoid-bg: #F5E7DF;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page-bg); color: var(--ink);
+    font-family: "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif; }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 56px 32px 96px; }
+  header h1 { font-size: 26px; font-weight: 400; margin: 0 0 10px; }
+  header p { max-width: 68ch; font-size: 15px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 8px; }
+  header .note { font-size: 12.5px; color: var(--muted); }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; margin-top: 44px;
+  }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--panel-bg); border: 1px solid var(--border); border-radius: 20px;
+    padding: 24px; display: flex; flex-direction: column; gap: 16px;
+  }
+  .panel-label .src { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .panel-label .desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
+
+  .stage {
+    background: var(--surface); border-radius: 14px; padding: 28px;
+    display: flex; align-items: center; justify-content: center; min-height: 300px;
+  }
+
+  /* placeholder "photo" block — no external images per artifact CSP */
+  .photo {
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--clean) 18%, var(--panel-bg)) 0%, color-mix(in srgb, var(--accent) 22%, var(--panel-bg)) 100%);
+  }
+
+  /* ---------- Panel 1: Grove — badge/wishlist over photo, rewards pill, full CTA ---------- */
+  .card-grove {
+    width: 240px; background: var(--panel-bg); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+  }
+  .card-grove .img { position: relative; height: 160px; }
+  .card-grove .ribbon {
+    position: absolute; top: 10px; left: 10px; background: var(--ink); color: var(--page-bg);
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 4px 9px; border-radius: 6px;
+  }
+  .card-grove .heart {
+    position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--panel-bg); display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--ink-soft); border: 1px solid var(--border);
+  }
+  .card-grove .body { padding: 14px; display: flex; flex-direction: column; gap: 5px; }
+  .card-grove .brand { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0; }
+  .card-grove h2 { font-size: 14px; font-weight: 600; margin: 0; line-height: 1.35; }
+  .card-grove .variants { font-size: 11px; color: var(--muted); text-decoration: underline; margin: 0 0 4px; }
+  .card-grove .rating { font-size: 11px; color: var(--ink-soft); margin: 0; }
+  .card-grove .rewards {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600;
+    color: var(--clean); background: var(--clean-bg); padding: 3px 9px; border-radius: 1000px; width: fit-content;
+  }
+  .card-grove .price { font-size: 14px; font-weight: 600; margin: 4px 0 0; }
+  .card-grove .cta {
+    margin-top: 6px; background: var(--clean); color: var(--panel-bg); border: none;
+    border-radius: 9px; padding: 10px; font-size: 12.5px; font-weight: 600; width: 100%;
+    cursor: pointer; font-family: inherit;
+  }
+  .card-grove .cta:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ---------- Panel 2: Credo — single corner badge on photo, no CTA, whole card tappable ---------- */
+  .card-credo {
+    width: 240px; border-radius: 4px; overflow: hidden; cursor: pointer;
+    border: 1px solid transparent; transition: border-color 200ms ease;
+  }
+  .card-credo:hover, .card-credo:focus-visible { border-color: var(--border-strong); outline: none; }
+  .card-credo:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .card-credo .img { position: relative; height: 200px; }
+  .card-credo .badge {
+    position: absolute; top: 10px; right: 10px; background: var(--panel-bg); color: var(--ink);
+    font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 4px 8px;
+  }
+  .card-credo .body { padding: 12px 2px; display: flex; flex-direction: column; gap: 3px; }
+  .card-credo .brand { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0; }
+  .card-credo h2 { font-size: 13.5px; font-weight: 400; margin: 0; line-height: 1.35; }
+  .card-credo .price { font-size: 12.5px; color: var(--ink-soft); margin: 2px 0 0; }
+  .card-credo .reviews { font-size: 10.5px; color: var(--muted); margin: 0; }
+
+  /* ---------- Panel 3: Thrive Market — gated, unavailable ---------- */
+  .card-gated {
+    width: 240px; height: 300px; border: 1.5px dashed var(--border-strong); border-radius: 14px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; padding: 24px; text-align: center;
+  }
+  .card-gated .icon {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--surface);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--muted);
+  }
+  .card-gated p { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+
+  /* ---------- Panel 4: EWG — numbered badge on photo + page-level legend ---------- */
+  .ewg-legend {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
+  }
+  .ewg-legend .step {
+    width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: var(--panel-bg);
+  }
+  .ewg-legend .lbl { font-size: 10px; color: var(--muted); margin: 0 4px; }
+
+  .card-ewg {
+    width: 240px; background: var(--panel-bg); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+  }
+  .card-ewg .img { position: relative; height: 170px; }
+  .card-ewg .score {
+    position: absolute; top: 10px; left: 10px; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--clean); color: var(--panel-bg); display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; border: 2px solid var(--panel-bg);
+  }
+  .card-ewg .body { padding: 14px; display: flex; flex-direction: column; gap: 4px; }
+  .card-ewg .brand { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0; }
+  .card-ewg h2 { font-size: 13.5px; font-weight: 500; margin: 0; line-height: 1.35; }
+  .card-ewg .verdict { font-size: 11px; color: var(--clean); font-weight: 600; margin: 2px 0 0; }
+
+  footer.foot {
+    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border);
+    font-size: 12.5px; color: var(--muted); line-height: 1.6; max-width: 70ch;
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1 class="serif">Retailer pattern reference</h1>
+    <p>Structural patterns observed from four clean/ingredient-conscious retailers, rebuilt with Clean Shopper's own tokens and content — not screenshots of the originals. The point is the structure (where the badge sits, whether there's a button, how the "verdict" is signaled), not the branding.</p>
+    <p class="note">Grove and Credo browsed live · EWG browsed live · Thrive Market is membership-gated, no public product grid to observe.</p>
+  </header>
+
+  <div class="grid">
+
+    <div class="panel">
+      <div class="panel-label">
+        <span class="src">1 — Grove Collaborative</span>
+        <div class="desc">Ribbon badge + wishlist heart both float on the photo. Rewards pill and star rating add trust signals. Full-width solid CTA anchors the card.</div>
+      </div>
+      <div class="stage">
+        <div class="card-grove">
+          <div class="img photo">
+            <span class="ribbon">New</span>
+            <span class="heart">♡</span>
+          </div>
+          <div class="body">
+            <p class="brand">Meadow &amp; Co.</p>
+            <h2>Lavender Field All-Purpose Cleaner</h2>
+            <p class="variants">3 options</p>
+            <p class="rating">★★★★★ 248</p>
+            <span class="rewards">+ Earn 5%</span>
+            <p class="price">$7.99</p>
+            <button class="cta" type="button">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label">
+        <span class="src">2 — Credo Beauty</span>
+        <div class="desc">One badge, pinned to the photo's corner rather than in the text block. No CTA on the card at all — the entire card is the tap target; purchase happens on the product page.</div>
+      </div>
+      <div class="stage">
+        <div class="card-credo" tabindex="0" role="link" aria-label="Lavender Field All-Purpose Cleaner, Meadow and Co, $7.99, 248 reviews">
+          <div class="img photo">
+            <span class="badge">Bestseller</span>
+          </div>
+          <div class="body">
+            <p class="brand">Meadow &amp; Co.</p>
+            <h2>Lavender Field All-Purpose Cleaner</h2>
+            <p class="price">$7.99</p>
+            <p class="reviews">248 Reviews</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label">
+        <span class="src">3 — Thrive Market</span>
+        <div class="desc">Membership wall blocks any public product grid — nothing observable without an account.</div>
+      </div>
+      <div class="stage">
+        <div class="card-gated">
+          <div class="icon">🔒</div>
+          <p>No pattern available — full catalog requires a paid membership to view.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label">
+        <span class="src">4 — EWG Skin Deep</span>
+        <div class="desc">Verdict isn't a chip — it's a small numbered circle (1–10, color-coded) pinned to the photo. The color key is explained <em>once</em>, at the top of the page, not re-explained per card.</div>
+      </div>
+      <div class="stage" style="flex-direction: column; align-items: flex-start; gap: 16px;">
+        <div class="ewg-legend">
+          <span class="lbl">Best</span>
+          <span class="step" style="background: var(--clean)">1</span>
+          <span class="step" style="background: color-mix(in srgb, var(--clean) 60%, var(--caution))">3</span>
+          <span class="step" style="background: var(--caution)">6</span>
+          <span class="step" style="background: var(--avoid)">9</span>
+          <span class="lbl">Worst</span>
+        </div>
+        <div class="card-ewg">
+          <div class="img photo">
+            <span class="score">2</span>
+          </div>
+          <div class="body">
+            <p class="brand">Meadow &amp; Co.</p>
+            <h2>Lavender Field All-Purpose Cleaner</h2>
+            <p class="verdict">Low hazard</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="foot">
+    None of these are proposals to adopt wholesale — they're reference points. The two ideas most worth testing against our own Card A/B: badge-on-photo placement (Grove, Credo, EWG all do this; we currently put the chip in the text block), and a page-level legend for the verdict system (EWG) instead of relying on each card's dot+label alone.
+  </footer>
+</div>

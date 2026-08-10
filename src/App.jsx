@@ -1,121 +1,153 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from 'react'
+import LibraryPage from './components/LibraryPage'
+import ShoppingListPage from './components/ShoppingListPage'
+import PreferencesPage from './components/PreferencesPage'
+import ComparePage from './components/ComparePage'
+import ProductDetailPage from './components/ProductDetailPage'
+import { fetchProducts } from './lib/api/products'
+
+const NAV_ITEMS = [
+  { id: 'library', label: 'Product library' },
+  { id: 'shopping-list', label: 'Shopping list' },
+  { id: 'preferences', label: 'Preferences' },
+  { id: 'compare', label: 'Compare' },
+]
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activePage, setActivePage] = useState('library')
+  const [shoppingListIds, setShoppingListIds] = useState([])
+  const [savedIds, setSavedIds] = useState([])
+  const [selectedProductId, setSelectedProductId] = useState(null)
+  const [products, setProducts] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    fetchProducts()
+      .then((data) => {
+        if (!cancelled) setProducts(data)
+      })
+      .catch((error) => {
+        if (!cancelled) setLoadError(error.message)
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  function handleToggleList(productId) {
+    setShoppingListIds((current) =>
+      current.includes(productId)
+        ? current.filter((id) => id !== productId)
+        : [...current, productId],
+    )
+  }
+
+  function handleRemoveFromList(productId) {
+    setShoppingListIds((current) => current.filter((id) => id !== productId))
+  }
+
+  function handleToggleSave(productId) {
+    setSavedIds((current) =>
+      current.includes(productId)
+        ? current.filter((id) => id !== productId)
+        : [...current, productId],
+    )
+  }
+
+  function handleNavigate(pageId) {
+    setSelectedProductId(null)
+    setActivePage(pageId)
+  }
+
+  const shoppingListProducts = products.filter((product) =>
+    shoppingListIds.includes(product.id),
+  )
+  const selectedProduct = products.find((p) => p.id === selectedProductId)
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="min-h-screen bg-cream">
+      <nav
+        aria-label="Main"
+        className="border-b border-border bg-panel px-6 py-3"
+      >
+        <div className="mx-auto flex max-w-5xl items-center gap-1">
+          {NAV_ITEMS.map((item) => {
+            const isActive = !selectedProductId && activePage === item.id
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleNavigate(item.id)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`rounded-pill px-4 py-2 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
+                  isActive
+                    ? 'bg-surface text-ink'
+                    : 'text-ink-soft hover:text-ink'
+                }`}
+              >
+                {item.label}
+                {item.id === 'shopping-list' && shoppingListIds.length > 0 && (
+                  <span className="ml-1.5 text-xs text-muted">
+                    ({shoppingListIds.length})
+                  </span>
+                )}
+              </button>
+            )
+          })}
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </nav>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      <main className="px-6 py-16">
+        <div className="mx-auto max-w-5xl">
+          {selectedProduct ? (
+            <ProductDetailPage
+              product={selectedProduct}
+              isSaved={savedIds.includes(selectedProduct.id)}
+              isInList={shoppingListIds.includes(selectedProduct.id)}
+              onBack={() => setSelectedProductId(null)}
+              onToggleList={() => handleToggleList(selectedProduct.id)}
+              onToggleSave={() => handleToggleSave(selectedProduct.id)}
+            />
+          ) : (
+            <>
+              {activePage === 'library' && (
+                <LibraryPage
+                  products={products}
+                  isLoading={isLoading}
+                  loadError={loadError}
+                  savedIds={savedIds}
+                  shoppingListIds={shoppingListIds}
+                  onToggleList={handleToggleList}
+                  onToggleSave={handleToggleSave}
+                  onSelectProduct={setSelectedProductId}
+                />
+              )}
+              {activePage === 'shopping-list' && (
+                <ShoppingListPage
+                  items={shoppingListProducts}
+                  onRemove={handleRemoveFromList}
+                />
+              )}
+              {activePage === 'preferences' && <PreferencesPage />}
+              {activePage === 'compare' && (
+                <ComparePage
+                  products={products}
+                  shoppingListIds={shoppingListIds}
+                  onToggleList={handleToggleList}
+                />
+              )}
+            </>
+          )}
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      </main>
+    </div>
   )
 }
 

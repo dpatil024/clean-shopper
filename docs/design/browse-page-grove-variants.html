@@ -1,0 +1,379 @@
+<title>Clean Shopper — Browse Page, Grove-style Card, 3 Variants</title>
+<style>
+  :root {
+    --page-bg: #FBF6EC; --panel-bg: #FFFDF8; --ink: #2E3B26; --ink-soft: #5B6650;
+    --muted: #6E6448; --border: #E4DBC8; --border-strong: #D3C6A9; --accent: #E8B34A;
+    --surface: #F3EDE0;
+    --clean: #52713F; --clean-bg: #EEF2E4;
+    --caution: #7E5720; --caution-bg: #F7EEDC;
+    --avoid: #8F452F; --avoid-bg: #F5E7DF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page-bg: #1B1712; --panel-bg: #241F18; --ink: #F1E9D8; --ink-soft: #C9BEA6;
+      --muted: #C2B38F; --border: #382F23; --border-strong: #4A3F2F; --accent: #E8B34A;
+      --surface: #221C15; --clean: #8FAE79; --clean-bg: #263420; --caution: #D9A75B;
+      --caution-bg: #3A2C15; --avoid: #D68666; --avoid-bg: #3A241B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #1B1712; --panel-bg: #241F18; --ink: #F1E9D8; --ink-soft: #C9BEA6;
+    --muted: #C2B38F; --border: #382F23; --border-strong: #4A3F2F; --accent: #E8B34A;
+    --surface: #221C15; --clean: #8FAE79; --clean-bg: #263420; --caution: #D9A75B;
+    --caution-bg: #3A2C15; --avoid: #D68666; --avoid-bg: #3A241B;
+  }
+  :root[data-theme="light"] {
+    --page-bg: #FBF6EC; --panel-bg: #FFFDF8; --ink: #2E3B26; --ink-soft: #5B6650;
+    --muted: #6E6448; --border: #E4DBC8; --border-strong: #D3C6A9; --accent: #E8B34A;
+    --surface: #F3EDE0; --clean: #52713F; --clean-bg: #EEF2E4; --caution: #7E5720;
+    --caution-bg: #F7EEDC; --avoid: #8F452F; --avoid-bg: #F5E7DF;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page-bg); color: var(--ink);
+    font-family: "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif; }
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+
+  header.page-head { padding: 40px 32px 0; max-width: 1160px; margin: 0 auto; }
+  header.page-head h1 { font-size: 22px; font-weight: 400; margin: 0 0 6px; }
+  header.page-head p { font-size: 13px; color: var(--muted); margin: 0; }
+
+  nav.jump {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; gap: 4px; padding: 14px 32px; margin-top: 20px;
+    background: color-mix(in srgb, var(--page-bg) 92%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav.jump a {
+    font-size: 12.5px; font-weight: 500; color: var(--muted);
+    text-decoration: none; padding: 6px 12px; border-radius: 1000px;
+  }
+  nav.jump a:hover { color: var(--ink); background: var(--surface); }
+  nav.jump a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  section.variant { padding: 56px 32px 80px; border-bottom: 1px solid var(--border); }
+  section.variant:last-of-type { border-bottom: none; }
+  .inner { max-width: 1160px; margin: 0 auto; }
+
+  .variant-tag {
+    display: inline-block; font-size: 11.5px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--muted); background: var(--surface);
+    padding: 5px 12px; border-radius: 1000px; margin-bottom: 18px;
+  }
+
+  .photo {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--clean) 18%, var(--panel-bg)) 0%, color-mix(in srgb, var(--accent) 22%, var(--panel-bg)) 100%);
+  }
+
+  /* ---------- Shared: Grove-style card ---------- */
+  .card-grove {
+    background: var(--panel-bg); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
+  }
+  .card-grove .img { position: relative; height: 160px; flex-shrink: 0; }
+  .card-grove .ribbon {
+    position: absolute; top: 10px; left: 10px;
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 4px 9px; border-radius: 6px;
+  }
+  .card-grove .ribbon.clean { background: var(--clean); color: var(--panel-bg); }
+  .card-grove .ribbon.caution { background: var(--caution); color: var(--panel-bg); }
+  .card-grove .ribbon.avoid { background: var(--avoid); color: var(--panel-bg); }
+  .card-grove .save {
+    position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--panel-bg); display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--ink-soft); border: 1px solid var(--border); cursor: pointer; padding: 0;
+  }
+  .card-grove .save:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .card-grove .body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .card-grove .brand { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0; }
+  .card-grove h3, .card-grove h4 { font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.35; }
+  .card-grove .note { font-size: 12px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+  .card-grove .tag-pill {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600;
+    padding: 3px 9px; border-radius: 1000px; width: fit-content;
+  }
+  .card-grove .tag-pill.clean { color: var(--clean); background: var(--clean-bg); }
+  .card-grove .tag-pill.caution { color: var(--caution); background: var(--caution-bg); }
+  .card-grove .tag-pill.avoid { color: var(--avoid); background: var(--avoid-bg); }
+  .card-grove .cta {
+    margin-top: auto; background: var(--ink); color: var(--page-bg); border: none;
+    border-radius: 9px; padding: 10px; font-size: 12.5px; font-weight: 600; width: 100%;
+    cursor: pointer; font-family: inherit;
+  }
+  .card-grove .cta:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ---------- Variant 1: Simple grid ---------- */
+  .v1-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+  .v1-head .eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 8px; }
+  .v1-head h2 { font-size: 28px; font-weight: 400; margin: 0; }
+  .v1-search {
+    display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--border-strong);
+    border-radius: 1000px; padding: 10px 18px; min-width: 220px; background: var(--panel-bg);
+  }
+  .v1-search input { border: none; outline: none; background: transparent; font-size: 14px; font-family: inherit; color: var(--ink); width: 100%; }
+  .v1-search input::placeholder { color: var(--muted); }
+  .v1-search:focus-within { border-color: var(--ink); }
+  .v1-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .v1-grid .card-grove { width: 100%; }
+  @media (max-width: 780px) { .v1-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---------- Variant 2: Dense marketplace, sidebar filters ---------- */
+  .v2-layout { display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: start; }
+  @media (max-width: 780px) { .v2-layout { grid-template-columns: 1fr; } }
+  .v2-sidebar h2 { font-size: 24px; font-weight: 400; margin: 0 0 20px; }
+  .v2-filter { margin-bottom: 22px; }
+  .v2-filter .flabel { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 10px; }
+  .v2-filter label { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink-soft); margin-bottom: 8px; cursor: pointer; }
+  .v2-filter input[type="checkbox"] { accent-color: var(--clean); width: 14px; height: 14px; }
+  .v2-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 980px) { .v2-grid { grid-template-columns: repeat(2, 1fr); } }
+  .v2-grid .card-grove .img { height: 120px; }
+  .v2-grid .card-grove .body { padding: 11px; gap: 5px; }
+  .v2-grid .card-grove h3 { font-size: 12.5px; }
+  .v2-grid .card-grove .note { display: none; }
+  .v2-grid .card-grove .cta { font-size: 11.5px; padding: 8px; }
+
+  /* ---------- Variant 3: Grouped by verdict, with summary ---------- */
+  .v3-head h2 { font-size: 28px; font-weight: 400; margin: 0 0 20px; }
+  .v3-summary { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
+  .stat { display: flex; align-items: baseline; gap: 8px; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 14px; padding: 14px 20px; }
+  .stat .num { font-family: "Iowan Old Style", Georgia, serif; font-size: 24px; line-height: 1; }
+  .stat .label { font-size: 12.5px; color: var(--ink-soft); }
+  .stat.clean .num { color: var(--clean); } .stat.caution .num { color: var(--caution); } .stat.avoid .num { color: var(--avoid); }
+  .v3-group { margin-bottom: 36px; } .v3-group:last-child { margin-bottom: 0; }
+  .v3-group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .v3-group-head h3 { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; }
+  .v3-group-head .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .v3-group-head.clean .dot { background: var(--clean); } .v3-group-head.clean h3 { color: var(--clean); }
+  .v3-group-head.caution .dot { background: var(--caution); } .v3-group-head.caution h3 { color: var(--caution); }
+  .v3-group-head.avoid .dot { background: var(--avoid); } .v3-group-head.avoid h3 { color: var(--avoid); }
+  .v3-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 780px) { .v3-row { grid-template-columns: repeat(2, 1fr); } }
+
+  footer.foot {
+    padding: 40px 32px 80px; max-width: 1160px; margin: 0 auto;
+    font-size: 12.5px; color: var(--muted); line-height: 1.6;
+  }
+</style>
+
+<header class="page-head">
+  <h1 class="serif">Browse page — Grove-style card, 3 variants</h1>
+  <p>Built from the Grove Collaborative card pattern you picked: badge + save icon on the photo, tag pill, full-width solid CTA — adapted to our clean/caution/avoid verdict instead of Grove's promo ribbons and rewards.</p>
+</header>
+
+<nav class="jump" aria-label="Jump to variant">
+  <a href="#g1">1 · Simple grid</a>
+  <a href="#g2">2 · Dense marketplace</a>
+  <a href="#g3">3 · Grouped, with summary</a>
+</nav>
+
+<section class="variant" id="g1">
+  <div class="inner">
+    <span class="variant-tag">Variant 1 — Simple grid</span>
+    <div class="v1-head">
+      <div>
+        <p class="eyebrow">Clean Shopper</p>
+        <h2 class="serif">Your saved library</h2>
+      </div>
+      <form class="v1-search" role="search">
+        <label class="visually-hidden" for="g1-search">Search your library</label>
+        <input id="g1-search" type="text" placeholder="Search your library" />
+      </form>
+    </div>
+    <div class="v1-grid">
+      <article class="card-grove">
+        <div class="img photo">
+          <span class="ribbon caution">Worth a look</span>
+          <button class="save" aria-label="Save Lavender Field All-Purpose Cleaner">♡</button>
+        </div>
+        <div class="body">
+          <p class="brand">Meadow &amp; Co.</p>
+          <h3>Lavender Field All-Purpose Cleaner</h3>
+          <span class="tag-pill caution">Fragrance flagged</span>
+          <p class="note">Contains a blend you've asked us to flag before.</p>
+          <button class="cta" type="button">Add to shopping list</button>
+        </div>
+      </article>
+      <article class="card-grove">
+        <div class="img photo">
+          <span class="ribbon clean">Clean</span>
+          <button class="save" aria-label="Save Unscented Dish Soap">♡</button>
+        </div>
+        <div class="body">
+          <p class="brand">Clearwater</p>
+          <h3>Unscented Dish Soap</h3>
+          <span class="tag-pill clean">Meets your standards</span>
+          <p class="note">Nothing more to check here.</p>
+          <button class="cta" type="button">Add to shopping list</button>
+        </div>
+      </article>
+      <article class="card-grove">
+        <div class="img photo">
+          <span class="ribbon avoid">Skip this one</span>
+          <button class="save" aria-label="Save Streak-Free Glass Cleaner">♡</button>
+        </div>
+        <div class="body">
+          <p class="brand">Brightside</p>
+          <h3>Streak-Free Glass Cleaner</h3>
+          <span class="tag-pill avoid">Ingredient conflict</span>
+          <p class="note">Conflicts with something you've asked us to avoid.</p>
+          <button class="cta" type="button">Add to shopping list</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="variant" id="g2">
+  <div class="inner">
+    <span class="variant-tag">Variant 2 — Dense marketplace, sidebar filters</span>
+    <div class="v2-layout">
+      <aside class="v2-sidebar">
+        <h2 class="serif">Browse</h2>
+        <div class="v2-filter">
+          <p class="flabel">Verdict</p>
+          <label><input type="checkbox" checked /> Clean</label>
+          <label><input type="checkbox" /> Worth a look</label>
+          <label><input type="checkbox" /> Skip</label>
+        </div>
+        <div class="v2-filter">
+          <p class="flabel">Category</p>
+          <label><input type="checkbox" /> Cleaning</label>
+          <label><input type="checkbox" /> Personal care</label>
+          <label><input type="checkbox" /> Kitchen</label>
+        </div>
+      </aside>
+      <div class="v2-grid">
+        <article class="card-grove">
+          <div class="img photo">
+            <span class="ribbon caution">Worth a look</span>
+            <button class="save" aria-label="Save Lavender Field All-Purpose Cleaner">♡</button>
+          </div>
+          <div class="body">
+            <p class="brand">Meadow &amp; Co.</p>
+            <h3>Lavender Field Cleaner</h3>
+            <span class="tag-pill caution">Fragrance flagged</span>
+            <button class="cta" type="button">Add to list</button>
+          </div>
+        </article>
+        <article class="card-grove">
+          <div class="img photo">
+            <span class="ribbon clean">Clean</span>
+            <button class="save" aria-label="Save Unscented Dish Soap">♡</button>
+          </div>
+          <div class="body">
+            <p class="brand">Clearwater</p>
+            <h3>Unscented Dish Soap</h3>
+            <span class="tag-pill clean">Meets standards</span>
+            <button class="cta" type="button">Add to list</button>
+          </div>
+        </article>
+        <article class="card-grove">
+          <div class="img photo">
+            <span class="ribbon avoid">Skip</span>
+            <button class="save" aria-label="Save Streak-Free Glass Cleaner">♡</button>
+          </div>
+          <div class="body">
+            <p class="brand">Brightside</p>
+            <h3>Streak-Free Glass Cleaner</h3>
+            <span class="tag-pill avoid">Ingredient conflict</span>
+            <button class="cta" type="button">Add to list</button>
+          </div>
+        </article>
+        <article class="card-grove">
+          <div class="img photo">
+            <span class="ribbon clean">Clean</span>
+            <button class="save" aria-label="Save Everyday Hand Soap">♡</button>
+          </div>
+          <div class="body">
+            <p class="brand">Clearwater</p>
+            <h3>Everyday Hand Soap</h3>
+            <span class="tag-pill clean">Meets standards</span>
+            <button class="cta" type="button">Add to list</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="variant" id="g3">
+  <div class="inner">
+    <span class="variant-tag">Variant 3 — Grouped by verdict, with summary</span>
+    <div class="v3-head">
+      <h2 class="serif">Your saved library</h2>
+    </div>
+    <div class="v3-summary">
+      <div class="stat clean"><span class="num">1</span><span class="label">clean</span></div>
+      <div class="stat caution"><span class="num">1</span><span class="label">worth a closer look</span></div>
+      <div class="stat avoid"><span class="num">1</span><span class="label">to skip</span></div>
+    </div>
+
+    <div class="v3-group">
+      <div class="v3-group-head clean"><span class="dot"></span><h3>Clean</h3></div>
+      <div class="v3-row">
+        <article class="card-grove">
+          <div class="img photo">
+            <span class="ribbon clean">Clean</span>
+            <button class="save" aria-label="Save Unscented Dish Soap">♡</button>
+          </div>
+          <div class="body">
+            <p class="brand">Clearwater</p>
+            <h4 style="text-transform:none;font-weight:600;letter-spacing:normal;">Unscented Dish Soap</h4>
+            <span class="tag-pill clean">Meets your standards</span>
+            <button class="cta" type="button">Add to shopping list</button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="v3-group">
+      <div class="v3-group-head caution"><span class="dot"></span><h3>Worth a closer look</h3></div>
+      <div class="v3-row">
+        <article class="card-grove">
+          <div class="img photo">
+            <span class="ribbon caution">Worth a look</span>
+            <button class="save" aria-label="Save Lavender Field All-Purpose Cleaner">♡</button>
+          </div>
+          <div class="body">
+            <p class="brand">Meadow &amp; Co.</p>
+            <h4 style="text-transform:none;font-weight:600;letter-spacing:normal;">Lavender Field All-Purpose Cleaner</h4>
+            <span class="tag-pill caution">Fragrance flagged</span>
+            <button class="cta" type="button">Add to shopping list</button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="v3-group">
+      <div class="v3-group-head avoid"><span class="dot"></span><h3>To skip</h3></div>
+      <div class="v3-row">
+        <article class="card-grove">
+          <div class="img photo">
+            <span class="ribbon avoid">Skip this one</span>
+            <button class="save" aria-label="Save Streak-Free Glass Cleaner">♡</button>
+          </div>
+          <div class="body">
+            <p class="brand">Brightside</p>
+            <h4 style="text-transform:none;font-weight:600;letter-spacing:normal;">Streak-Free Glass Cleaner</h4>
+            <span class="tag-pill avoid">Ingredient conflict</span>
+            <button class="cta" type="button">Add to shopping list</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  All three use the Grove-style card: verdict badge + save icon on the photo, a tag pill restating the verdict in the text block, full-width solid CTA. Verdict badge replaces Grove's "New"/"Limited Edition" ribbons; the tag pill replaces Grove's rewards pill. Variant 2's filter sidebar and Variant 3's grouping/summary are page-level structure, not part of the card itself.
+</footer>

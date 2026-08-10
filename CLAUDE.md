@@ -28,8 +28,13 @@ Single-user app. No authentication in V1. Local state plus Supabase for data per
 - Do not create new components when an existing component in the component library covers the use case
 - Do not use any AI model other than claude-sonnet-4-20250514
 - Always ask before creating a new component file. Confirm the name and location with me first
+- Do not proactively suggest or ask to commit/push to git. Wait until explicitly asked to commit or push
 
 ## References
+- Design system: See /docs/design.md -- overview of tokens, components, page decisions, and why. Start here for any design/UI work
 - Component library: See /docs/component-spec.md -- use existing components before creating new ones
 - Build plan: See /docs/build-plan.md -- build phase by phase, do not jump ahead
 - Project context: See /docs/project-context.md -- full project intake and design decisions
+- Design tokens: See /docs/design-tokens.md -- color, type, spacing, radius, elevation, motion
+- Prompt optimizer: Use /prompt-optimizer to evaluate and refine instructions before sending them
+- Accessibility: Run /a11y-check against any design tokens, component, page, or artifact you produce or change -- before presenting it as done, not only when asked
