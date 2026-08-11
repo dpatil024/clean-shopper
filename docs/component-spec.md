@@ -20,7 +20,10 @@ Component names and specs below are derived from the product scope in `project-c
 | `ShoppingListItem` | ✅ Built (first-pass design — see note) | Shopping list screen | A product already added to the list, with a remove action |
 | `CompareCard` | ✅ Built (first-pass design — see note) | Compare view | Condensed `ProductCard` with a `highlights` list for side-by-side comparison |
 | `AssistantProductCard` | ✅ Built | AI assistant surface (chat/UI TBD) | Photo-left/editorial layout (Variant B) + Grove badge/save-icon/pill treatment |
+| `LandingPage` | **Not built — direction picked** | Pre-app marketing page | Editorial direction chosen from 4 options; see `docs/design.md` §8 and `docs/design/landing-page-variants.html`. Name/location need confirming with the user before creating the file, per the rule at the top of this doc. |
 | Conversational surface (name TBD) | **Scope undefined, not built** | Chat / assistant | See note below |
+
+**Note on page-level components:** this table originally tracked reusable UI primitives; the app has since grown real pages (`LibraryPage`, `ShoppingListPage`, `PreferencesPage`, `ComparePage`, `ProductDetailPage`, plus the nav shell in `App.jsx`) that aren't individually itemized here — see `src/components/` and `src/App.jsx` directly for their current shape. This table hasn't been fully audited against that growth; treat it as reliable for the primitives listed, not as a complete inventory.
 
 **First-pass design note:** `PreferenceTag`, `PreferencesPanel`, `ShoppingListItem`, and `CompareCard` did **not** go through the comparison-exploration process the browse page and `ProductCard` did (no HTML variant artifacts, no retailer research) — they were built directly from the token system and existing patterns (`VerdictBadge`, `IconButton`) on request. Treat their current layout as a reasonable first pass, not a validated decision — revisit each with an actual comparison before treating the layout as final, especially `CompareCard`, whose `highlights` prop is a guess at what a comparison view needs, not something derived from real ingredient/certification data (that data model doesn't exist yet).
 

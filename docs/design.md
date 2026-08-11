@@ -2,6 +2,8 @@
 
 Single entry point for "what does the Clean Shopper design system look like and why." This doc is an overview and index — the detailed source of truth for each piece lives in the files it links to. If this doc and a linked file disagree, the linked file wins; update this page to match rather than the other way around.
 
+**Status note:** §3 and §4 below describe an earlier point in the project (still true directionally, stale on specifics — e.g. §3 says "currently one component is built," which is no longer accurate). For the actual current state, treat **[component-spec.md](component-spec.md)**'s inventory table and **`src/`** itself as the source of truth. The app now has four real pages (browse, shopping list, preferences, compare) plus a product detail view, a working Supabase backend (`supabase/`), and is deployed at both GitHub Pages and Vercel. §8 below has the most recent decision.
+
 ---
 
 ## 1. Direction
@@ -48,7 +50,21 @@ Full chronological detail of the first session: **[session-log-2026-08-01.md](se
 - No dark-mode token values in code yet (the HTML explorations sketch one; `src/index.css` doesn't).
 - `font-family-display`/`font-family-base` are system-font stand-ins for a warm serif + humanist sans; no licensed/self-hosted fonts chosen yet.
 
-## 7. Where everything lives
+## 8. Next up: landing page
+
+A marketing/landing page (before the app itself) doesn't exist yet — the app currently starts straight at the browse page, no auth, single-user. Four directions were compared in **[design/landing-page-variants.html](design/landing-page-variants.html)**, all built from the existing tokens and the Grove-style verdict system (no new visual language introduced):
+
+1. **Calm & classic** — centered hero, direct headline + subhead + two CTAs, three numbered value props.
+2. **Editorial** — ✅ **Picked.** Asymmetric hero (headline + supporting image side by side), a 3-step "how it works" sequence, and a pull-quote reframing "Worth a closer look" as reassurance rather than a warning. Matches the project's established warm/reassuring tone (see §1) more directly than the other three.
+3. **Product-forward** — leads with real-looking product cards instead of describing the product abstractly.
+4. **Trust-led** — leads with the verdict system itself as the pitch.
+
+**Not yet built** — this is the next task. Whoever picks this up needs to:
+- Create a new page/component (likely `LandingPage.jsx` — confirm name/location with the user first, per `CLAUDE.md`'s component-creation rule) implementing the Editorial direction's structure and copy from the artifact above.
+- Decide how it fits into `App.jsx`'s current nav-tab page-switching pattern — a landing page is a different kind of "page" than Library/Shopping List/etc. (no nav, its own CTA leads into the app), so this may need its own top-level routing decision rather than just becoming a fifth `NAV_ITEMS` entry.
+- Run `/a11y-check` before calling it done, per the standing project instruction in `CLAUDE.md`.
+
+## 9. Where everything lives
 
 | What | Path |
 |---|---|

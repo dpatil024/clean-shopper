@@ -1,0 +1,321 @@
+<title>Clean Shopper — Landing Page Variants</title>
+<style>
+  :root {
+    --color-ink: #2e3b26; --color-ink-soft: #5b6650; --color-cream: #fbf6ec;
+    --color-surface: #f3ede0; --color-panel: #fffdf8; --color-border: #e4dbc8;
+    --color-border-strong: #d3c6a9; --color-accent: #e8b34a; --color-muted: #6e6448;
+    --color-clean: #52713f; --color-clean-bg: #eef2e4;
+    --color-caution: #7e5720; --color-caution-bg: #f7eedc;
+    --color-avoid: #8f452f; --color-avoid-bg: #f5e7df;
+    --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    --font-sans: "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --radius-card: 16px; --radius-pill: 1000px;
+    --shadow-card: 0px 6px 16px 0px rgba(46, 34, 18, 0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-ink: #f1e9d8; --color-ink-soft: #c9bea6; --color-cream: #1b1712;
+      --color-surface: #221c15; --color-panel: #241f18; --color-border: #382f23;
+      --color-border-strong: #4a3f2f; --color-accent: #e8b34a; --color-muted: #c2b38f;
+      --color-clean: #8fae79; --color-clean-bg: #263420;
+      --color-caution: #d9a75b; --color-caution-bg: #3a2c15;
+      --color-avoid: #d68666; --color-avoid-bg: #3a241b;
+      --shadow-card: 0px 6px 16px 0px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --color-ink: #f1e9d8; --color-ink-soft: #c9bea6; --color-cream: #1b1712;
+    --color-surface: #221c15; --color-panel: #241f18; --color-border: #382f23;
+    --color-border-strong: #4a3f2f; --color-accent: #e8b34a; --color-muted: #c2b38f;
+    --color-clean: #8fae79; --color-clean-bg: #263420;
+    --color-caution: #d9a75b; --color-caution-bg: #3a2c15;
+    --color-avoid: #d68666; --color-avoid-bg: #3a241b;
+    --shadow-card: 0px 6px 16px 0px rgba(0,0,0,0.4);
+  }
+  :root[data-theme="light"] {
+    --color-ink: #2e3b26; --color-ink-soft: #5b6650; --color-cream: #fbf6ec;
+    --color-surface: #f3ede0; --color-panel: #fffdf8; --color-border: #e4dbc8;
+    --color-border-strong: #d3c6a9; --color-accent: #e8b34a; --color-muted: #6e6448;
+    --color-clean: #52713f; --color-clean-bg: #eef2e4;
+    --color-caution: #7e5720; --color-caution-bg: #f7eedc;
+    --color-avoid: #8f452f; --color-avoid-bg: #f5e7df;
+    --shadow-card: 0px 6px 16px 0px rgba(46,34,18,0.12);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--color-cream); color: var(--color-ink);
+    font-family: var(--font-sans); -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: var(--font-display); }
+
+  nav.jump {
+    position: sticky; top: 0; z-index: 20; display: flex; gap: 4px;
+    padding: 14px 32px; background: color-mix(in srgb, var(--color-cream) 92%, transparent);
+    backdrop-filter: blur(6px); border-bottom: 1px solid var(--color-border);
+  }
+  nav.jump a {
+    font-size: 12.5px; font-weight: 500; color: var(--color-muted);
+    text-decoration: none; padding: 6px 12px; border-radius: var(--radius-pill);
+  }
+  nav.jump a:hover { color: var(--color-ink); background: var(--color-surface); }
+
+  section.variant { border-bottom: 1px solid var(--color-border); }
+  .variant-tag {
+    display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--color-muted); background: var(--color-surface);
+    padding: 5px 12px; border-radius: var(--radius-pill); margin: 24px 0 0 32px;
+  }
+
+  .btn-primary, .btn-ghost {
+    outline: none;
+  }
+  .btn-primary:focus-visible, .btn-ghost:focus-visible {
+    outline: 2px solid var(--color-ink); outline-offset: 2px;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 6px; border: none;
+    border-radius: 10px; background: var(--color-ink); color: var(--color-cream);
+    font-family: inherit; font-size: 15px; font-weight: 600; padding: 13px 22px;
+    cursor: pointer; text-decoration: none;
+  }
+  .btn-ghost {
+    display: inline-flex; align-items: center; border: 1.5px solid var(--color-border-strong);
+    border-radius: 10px; background: transparent; color: var(--color-ink);
+    font-family: inherit; font-size: 15px; font-weight: 600; padding: 12px 20px;
+    cursor: pointer; text-decoration: none;
+  }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius-pill);
+    padding: 6px 13px; font-size: 12.5px; font-weight: 600;
+  }
+  .chip.clean { background: var(--color-clean-bg); color: var(--color-clean); }
+  .chip.caution { background: var(--color-caution-bg); color: var(--color-caution); }
+  .chip.avoid { background: var(--color-avoid-bg); color: var(--color-avoid); }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .chip.clean .dot { background: var(--color-clean); }
+  .chip.caution .dot { background: var(--color-caution); }
+  .chip.avoid .dot { background: var(--color-avoid); }
+
+  .photo {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-clean) 16%, var(--color-panel)) 0%, color-mix(in srgb, var(--color-accent) 20%, var(--color-panel)) 100%);
+  }
+
+  /* ============ VARIANT 1: Calm / classic ============ */
+  .v1-hero { max-width: 720px; margin: 0 auto; padding: 72px 32px 56px; text-align: center; }
+  .v1-hero .eyebrow { font-size: 12.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); margin: 0 0 18px; }
+  .v1-hero h2 { font-size: 46px; line-height: 1.15; font-weight: 400; margin: 0 0 20px; }
+  .v1-hero p { font-size: 17px; line-height: 1.6; color: var(--color-ink-soft); max-width: 52ch; margin: 0 auto 32px; }
+  .v1-hero .actions { display: flex; gap: 12px; justify-content: center; }
+
+  .v1-values { max-width: 1000px; margin: 0 auto; padding: 8px 32px 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .v1-values .value h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+  .v1-values .value p { font-size: 14px; line-height: 1.6; color: var(--color-ink-soft); margin: 0; }
+  .v1-values .value .num { font-family: var(--font-display); font-size: 22px; color: var(--color-muted); margin-bottom: 10px; display: block; }
+
+  /* ============ VARIANT 2: Editorial ============ */
+  .v2-hero {
+    max-width: 1100px; margin: 0 auto; padding: 64px 32px 0; display: grid;
+    grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center;
+  }
+  .v2-hero .eyebrow { font-size: 12.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); margin: 0 0 16px; }
+  .v2-hero h2 { font-size: 44px; line-height: 1.18; font-weight: 400; margin: 0 0 20px; }
+  .v2-hero p { font-size: 16px; line-height: 1.7; color: var(--color-ink-soft); max-width: 46ch; margin: 0 0 28px; }
+  .v2-hero .img { aspect-ratio: 4/5; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); }
+
+  .v2-steps { max-width: 1100px; margin: 0 auto; padding: 72px 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .v2-steps .step .label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent-ink, var(--color-muted)); margin: 0 0 10px; }
+  .v2-steps .step h3 { font-family: var(--font-display); font-weight: 400; font-size: 22px; margin: 0 0 8px; }
+  .v2-steps .step p { font-size: 14px; line-height: 1.6; color: var(--color-ink-soft); margin: 0; }
+  .v2-steps .step { border-top: 1px solid var(--color-border); padding-top: 20px; }
+
+  .v2-quote { max-width: 720px; margin: 0 auto; padding: 8px 32px 72px; text-align: center; }
+  .v2-quote p { font-family: var(--font-display); font-size: 26px; line-height: 1.4; color: var(--color-ink); margin: 0; }
+
+  /* ============ VARIANT 3: Product-forward ============ */
+  .v3-hero { max-width: 1100px; margin: 0 auto; padding: 56px 32px 24px; text-align: center; }
+  .v3-hero .eyebrow { font-size: 12.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); margin: 0 0 16px; }
+  .v3-hero h2 { font-size: 38px; line-height: 1.2; font-weight: 400; margin: 0 0 16px; max-width: 20ch; margin-left: auto; margin-right: auto; }
+  .v3-hero p { font-size: 15.5px; color: var(--color-ink-soft); max-width: 50ch; margin: 0 auto 28px; }
+
+  .v3-grid { max-width: 1100px; margin: 0 auto; padding: 0 32px 64px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .v3-card { background: var(--color-panel); border: 1px solid var(--color-border); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); text-align: left; }
+  .v3-card .img { position: relative; aspect-ratio: 1/1; }
+  .v3-card .ribbon { position: absolute; top: 10px; left: 10px; }
+  .v3-card .body { padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+  .v3-card .brand { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-muted); margin: 0; }
+  .v3-card h3 { font-size: 14.5px; font-weight: 600; margin: 0; }
+
+  .v3-below { max-width: 900px; margin: 0 auto; padding: 8px 32px 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: center; }
+  .v3-below h4 { font-size: 14px; font-weight: 600; margin: 0 0 6px; }
+  .v3-below p { font-size: 13px; color: var(--color-ink-soft); margin: 0; line-height: 1.55; }
+
+  /* ============ VARIANT 4: Trust / reassurance ============ */
+  .v4-hero { max-width: 780px; margin: 0 auto; padding: 64px 32px 12px; text-align: center; }
+  .v4-hero .eyebrow { font-size: 12.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); margin: 0 0 16px; }
+  .v4-hero h2 { font-size: 42px; line-height: 1.2; font-weight: 400; margin: 0 0 18px; }
+  .v4-hero p { font-size: 16px; line-height: 1.65; color: var(--color-ink-soft); max-width: 50ch; margin: 0 auto 28px; }
+
+  .v4-verdicts { max-width: 780px; margin: 0 auto; padding: 8px 32px 48px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .v4-explain { max-width: 900px; margin: 0 auto; padding: 8px 32px 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .v4-explain .card { background: var(--color-panel); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 22px; }
+  .v4-explain .card p.desc { font-size: 13.5px; color: var(--color-ink-soft); line-height: 1.6; margin: 10px 0 0; }
+
+  footer.foot {
+    max-width: 1100px; margin: 0 auto; padding: 40px 32px 80px;
+    font-size: 12.5px; color: var(--color-muted); line-height: 1.6;
+  }
+</style>
+
+<h1 class="serif" style="font-size: 20px; font-weight: 400; margin: 24px 32px 0; padding: 0;">Clean Shopper — Landing Page Variants</h1>
+
+<nav class="jump" aria-label="Jump to variant">
+  <a href="#lv1">1 · Calm &amp; classic</a>
+  <a href="#lv2">2 · Editorial</a>
+  <a href="#lv3">3 · Product-forward</a>
+  <a href="#lv4">4 · Trust-led</a>
+</nav>
+
+<!-- ============ VARIANT 1 ============ -->
+<section class="variant" id="lv1">
+  <span class="variant-tag">Variant 1 — Calm &amp; classic</span>
+  <div class="v1-hero">
+    <p class="eyebrow">Clean Shopper</p>
+    <h2 class="serif">Know what's actually in it, before it's in your cart.</h2>
+    <p>Clean Shopper reads ingredient labels so you don't have to. Search a product, get a clear clean, caution, or avoid verdict, and save the preferences that matter to you — once.</p>
+    <div class="actions">
+      <a href="#" class="btn-primary">Start browsing →</a>
+      <a href="#" class="btn-ghost">How it works</a>
+    </div>
+  </div>
+  <div class="v1-values">
+    <div class="value">
+      <span class="num serif">01</span>
+      <h3>Search once, remember always</h3>
+      <p>Save the ingredients you avoid, the brands you trust, and the certifications that matter — applied automatically to every product you look up.</p>
+    </div>
+    <div class="value">
+      <span class="num serif">02</span>
+      <h3>A verdict, not a label</h3>
+      <p>Clean, worth a closer look, or skip this one — a straight answer instead of another vague "natural" claim to decode yourself.</p>
+    </div>
+    <div class="value">
+      <span class="num serif">03</span>
+      <h3>Compare before you commit</h3>
+      <p>Put two or three products side by side and see exactly what sets them apart, then build a shopping list that's actually yours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VARIANT 2 ============ -->
+<section class="variant" id="lv2">
+  <span class="variant-tag">Variant 2 — Editorial</span>
+  <div class="v2-hero">
+    <div>
+      <p class="eyebrow">Clean Shopper</p>
+      <h2 class="serif">Replacing one toxic product at a time shouldn't feel like a research project.</h2>
+      <p>You already know which ingredients worry you. Clean Shopper just remembers them — and does the label-reading for every product you're curious about, so the research doesn't start over every time.</p>
+      <a href="#" class="btn-primary">Start browsing →</a>
+    </div>
+    <div class="img photo"></div>
+  </div>
+
+  <div class="v2-steps">
+    <div class="step">
+      <p class="label">Step one</p>
+      <h3 class="serif">Tell us what to watch for</h3>
+      <p>Ingredients to avoid, brands you already trust, certifications you care about — saved once.</p>
+    </div>
+    <div class="step">
+      <p class="label">Step two</p>
+      <h3 class="serif">Browse with your standards applied</h3>
+      <p>Every product you look at is checked against what you told us, automatically.</p>
+    </div>
+    <div class="step">
+      <p class="label">Step three</p>
+      <h3 class="serif">Build a list you trust</h3>
+      <p>Save what fits, compare what doesn't, and shop knowing it already passed your bar.</p>
+    </div>
+  </div>
+
+  <div class="v2-quote">
+    <p class="serif">"Worth a closer look" isn't a scare tactic — it's just what's true, stated plainly.</p>
+  </div>
+</section>
+
+<!-- ============ VARIANT 3 ============ -->
+<section class="variant" id="lv3">
+  <span class="variant-tag">Variant 3 — Product-forward</span>
+  <div class="v3-hero">
+    <p class="eyebrow">Clean Shopper</p>
+    <h2 class="serif">See it in action</h2>
+    <p>This isn't a promise — it's what browsing actually looks like. Every product gets a plain-language verdict, right where you're already looking.</p>
+  </div>
+
+  <div class="v3-grid">
+    <article class="v3-card">
+      <div class="img photo"><div class="ribbon"><span class="chip caution"><span class="dot"></span>Worth a closer look</span></div></div>
+      <div class="body">
+        <p class="brand">Meadow &amp; Co.</p>
+        <h3>Lavender Field All-Purpose Cleaner</h3>
+      </div>
+    </article>
+    <article class="v3-card">
+      <div class="img photo"><div class="ribbon"><span class="chip clean"><span class="dot"></span>Clean</span></div></div>
+      <div class="body">
+        <p class="brand">Clearwater</p>
+        <h3>Unscented Dish Soap</h3>
+      </div>
+    </article>
+    <article class="v3-card">
+      <div class="img photo"><div class="ribbon"><span class="chip avoid"><span class="dot"></span>Skip this one</span></div></div>
+      <div class="body">
+        <p class="brand">Brightside</p>
+        <h3>Streak-Free Glass Cleaner</h3>
+      </div>
+    </article>
+  </div>
+
+  <div class="v3-below">
+    <div><h4>Search anything</h4><p>Home, personal care, or pantry — start with what you're already shopping for.</p></div>
+    <div><h4>Save what matters</h4><p>Your standards, applied to every result, every time.</p></div>
+    <div><h4>Build your list</h4><p>Add as you go, compare before you decide.</p></div>
+  </div>
+</section>
+
+<!-- ============ VARIANT 4 ============ -->
+<section class="variant" id="lv4">
+  <span class="variant-tag">Variant 4 — Trust-led</span>
+  <div class="v4-hero">
+    <p class="eyebrow">Clean Shopper</p>
+    <h2 class="serif">Three words. No jargon. No fine print to decode.</h2>
+    <p>Every product gets one of three plain verdicts — never a hidden score, never a paywall to see why.</p>
+  </div>
+
+  <div class="v4-verdicts">
+    <span class="chip clean"><span class="dot"></span>Clean — meets your standards</span>
+    <span class="chip caution"><span class="dot"></span>Worth a closer look — flagged, not forbidden</span>
+    <span class="chip avoid"><span class="dot"></span>Skip this one — conflicts with what you told us</span>
+  </div>
+
+  <div class="v4-explain">
+    <div class="card">
+      <span class="chip clean"><span class="dot"></span>Clean</span>
+      <p class="desc">Nothing you've flagged, nothing to second-guess. Add it and move on.</p>
+    </div>
+    <div class="card">
+      <span class="chip caution"><span class="dot"></span>Worth a closer look</span>
+      <p class="desc">Contains something you've asked us to watch for — stated plainly, not as a warning siren.</p>
+    </div>
+    <div class="card">
+      <span class="chip avoid"><span class="dot"></span>Skip this one</span>
+      <p class="desc">Conflicts with a standard you set. Your call, always — we just tell you straight.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  All four reuse the same tokens, verdict system, and Grove-style card pattern already built into the app — this is about hero structure and framing, not a new visual language.
+</footer>
