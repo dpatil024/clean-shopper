@@ -15,12 +15,13 @@ export default function LibraryPage({
 }) {
   const [verdictFilter, setVerdictFilter] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [submittedQuery, setSubmittedQuery] = useState('')
 
   function handleVerdictClick(verdict) {
     setVerdictFilter((current) => (current === verdict ? null : verdict))
   }
 
-  const query = searchQuery.trim().toLowerCase()
+  const query = submittedQuery.trim().toLowerCase()
 
   const visibleProducts = products.filter((product) => {
     const matchesVerdict = !verdictFilter || product.verdict === verdictFilter
@@ -35,7 +36,7 @@ export default function LibraryPage({
     <div className="flex flex-col gap-10">
       <header className="flex flex-wrap items-end justify-between gap-6">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted">
+          <p className="text-xs font-medium uppercase tracking-wide text-clean">
             Clean Shopper
           </p>
           <h1 className="font-display text-4xl leading-tight text-ink">
@@ -49,6 +50,7 @@ export default function LibraryPage({
           placeholder="Search products"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onSubmit={() => setSubmittedQuery(searchQuery)}
         />
       </header>
 

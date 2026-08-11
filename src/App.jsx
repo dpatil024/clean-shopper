@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import LandingPage from './components/LandingPage'
 import LibraryPage from './components/LibraryPage'
 import ShoppingListPage from './components/ShoppingListPage'
 import PreferencesPage from './components/PreferencesPage'
@@ -14,6 +15,7 @@ const NAV_ITEMS = [
 ]
 
 function App() {
+  const [hasEnteredApp, setHasEnteredApp] = useState(false)
   const [activePage, setActivePage] = useState('library')
   const [shoppingListIds, setShoppingListIds] = useState([])
   const [savedIds, setSavedIds] = useState([])
@@ -70,6 +72,10 @@ function App() {
     shoppingListIds.includes(product.id),
   )
   const selectedProduct = products.find((p) => p.id === selectedProductId)
+
+  if (!hasEnteredApp) {
+    return <LandingPage onEnter={() => setHasEnteredApp(true)} />
+  }
 
   return (
     <div className="min-h-screen bg-cream">

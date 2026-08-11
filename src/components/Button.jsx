@@ -1,6 +1,6 @@
 const VARIANT_STYLES = {
   primary:
-    'bg-ink text-cream motion-safe:hover:-translate-y-0.5 focus-visible:outline-ink',
+    'bg-accent text-ink motion-safe:hover:-translate-y-0.5 focus-visible:outline-ink',
   secondary:
     'border border-border-strong bg-panel text-ink hover:border-ink focus-visible:outline-ink',
   ghost:
