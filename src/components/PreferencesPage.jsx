@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PreferencesPanel from './PreferencesPanel'
 import { SAMPLE_PREFERENCE_CATEGORIES } from '../lib/sample-data'
 
-export default function PreferencesPage() {
+export default function PreferencesPage({ onHome }) {
   const [categories, setCategories] = useState(SAMPLE_PREFERENCE_CATEGORIES)
 
   function handleRemove(categoryId, itemId) {
@@ -18,9 +18,13 @@ export default function PreferencesPage() {
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted">
+        <button
+          type="button"
+          onClick={onHome}
+          className="w-fit text-xs font-medium uppercase tracking-wide text-muted hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        >
           Clean Shopper
-        </p>
+        </button>
         <h1 className="font-display text-4xl leading-tight text-ink">
           Your preferences
         </h1>

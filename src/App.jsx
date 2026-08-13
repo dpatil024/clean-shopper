@@ -133,20 +133,25 @@ function App() {
                   onToggleList={handleToggleList}
                   onToggleSave={handleToggleSave}
                   onSelectProduct={setSelectedProductId}
+                  onHome={() => setHasEnteredApp(false)}
                 />
               )}
               {activePage === 'shopping-list' && (
                 <ShoppingListPage
                   items={shoppingListProducts}
                   onRemove={handleRemoveFromList}
+                  onHome={() => setHasEnteredApp(false)}
                 />
               )}
-              {activePage === 'preferences' && <PreferencesPage />}
+              {activePage === 'preferences' && (
+                <PreferencesPage onHome={() => setHasEnteredApp(false)} />
+              )}
               {activePage === 'compare' && (
                 <ComparePage
                   products={products}
                   shoppingListIds={shoppingListIds}
                   onToggleList={handleToggleList}
+                  onHome={() => setHasEnteredApp(false)}
                 />
               )}
             </>

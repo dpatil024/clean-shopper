@@ -12,6 +12,7 @@ export default function LibraryPage({
   onToggleList,
   onToggleSave,
   onSelectProduct,
+  onHome,
 }) {
   const [verdictFilter, setVerdictFilter] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
@@ -36,9 +37,13 @@ export default function LibraryPage({
     <div className="flex flex-col gap-10">
       <header className="flex flex-wrap items-end justify-between gap-6">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-medium uppercase tracking-wide text-clean">
+          <button
+            type="button"
+            onClick={onHome}
+            className="w-fit text-xs font-medium uppercase tracking-wide text-clean hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          >
             Clean Shopper
-          </p>
+          </button>
           <h1 className="font-display text-4xl leading-tight text-ink">
             Browse Products
           </h1>

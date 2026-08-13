@@ -1,12 +1,16 @@
 import ShoppingListItem from './ShoppingListItem'
 
-export default function ShoppingListPage({ items, onRemove }) {
+export default function ShoppingListPage({ items, onRemove, onHome }) {
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted">
+        <button
+          type="button"
+          onClick={onHome}
+          className="w-fit text-xs font-medium uppercase tracking-wide text-muted hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        >
           Clean Shopper
-        </p>
+        </button>
         <h1 className="font-display text-4xl leading-tight text-ink">
           Shopping list
         </h1>
