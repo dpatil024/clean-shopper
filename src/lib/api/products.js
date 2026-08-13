@@ -10,6 +10,7 @@ function mapRow(row) {
     verdict: row.verdict,
     note: row.note,
     highlights: row.highlights,
+    category: row.category,
   }
 }
 

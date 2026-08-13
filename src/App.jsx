@@ -4,6 +4,7 @@ import LibraryPage from './components/LibraryPage'
 import ShoppingListPage from './components/ShoppingListPage'
 import PreferencesPage from './components/PreferencesPage'
 import ComparePage from './components/ComparePage'
+import ChatPage from './components/ChatPage'
 import ProductDetailPage from './components/ProductDetailPage'
 import { fetchProducts } from './lib/api/products'
 
@@ -12,6 +13,7 @@ const NAV_ITEMS = [
   { id: 'shopping-list', label: 'Shopping list' },
   { id: 'preferences', label: 'Preferences' },
   { id: 'compare', label: 'Compare' },
+  { id: 'assistant', label: 'Ask Clean Shopper' },
 ]
 
 function App() {
@@ -23,6 +25,10 @@ function App() {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState(null)
+  const [verdictFilter, setVerdictFilter] = useState(null)
+  const [categoryFilter, setCategoryFilter] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [submittedQuery, setSubmittedQuery] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -68,10 +74,26 @@ function App() {
     setActivePage(pageId)
   }
 
+  function handleVerdictFilterChange(verdict) {
+    setVerdictFilter((current) => (current === verdict ? null : verdict))
+  }
+
   const shoppingListProducts = products.filter((product) =>
     shoppingListIds.includes(product.id),
   )
   const selectedProduct = products.find((p) => p.id === selectedProductId)
+
+  const query = submittedQuery.trim().toLowerCase()
+  const visibleProducts = products.filter((product) => {
+    const matchesVerdict = !verdictFilter || product.verdict === verdictFilter
+    const matchesCategory = !categoryFilter || product.category === categoryFilter
+    const matchesQuery =
+      !query ||
+      product.name.toLowerCase().includes(query) ||
+      product.brand.toLowerCase().includes(query)
+    return matchesVerdict && matchesCategory && matchesQuery
+  })
+  const isLibraryFiltered = Boolean(verdictFilter || categoryFilter || query)
 
   if (!hasEnteredApp) {
     return <LandingPage onEnter={() => setHasEnteredApp(true)} />
@@ -134,6 +156,15 @@ function App() {
                   onToggleSave={handleToggleSave}
                   onSelectProduct={setSelectedProductId}
                   onHome={() => setHasEnteredApp(false)}
+                  verdictFilter={verdictFilter}
+                  onVerdictFilterChange={handleVerdictFilterChange}
+                  categoryFilter={categoryFilter}
+                  onCategoryFilterChange={setCategoryFilter}
+                  searchQuery={searchQuery}
+                  onSearchQueryChange={setSearchQuery}
+                  submittedQuery={submittedQuery}
+                  onSearchSubmit={() => setSubmittedQuery(searchQuery)}
+                  visibleProducts={visibleProducts}
                 />
               )}
               {activePage === 'shopping-list' && (
@@ -150,6 +181,15 @@ function App() {
                 <ComparePage
                   products={products}
                   shoppingListIds={shoppingListIds}
+                  onToggleList={handleToggleList}
+                  onHome={() => setHasEnteredApp(false)}
+                />
+              )}
+              {activePage === 'assistant' && (
+                <ChatPage
+                  products={products}
+                  contextProducts={isLibraryFiltered ? visibleProducts : products}
+                  isFiltered={isLibraryFiltered}
                   onToggleList={handleToggleList}
                   onHome={() => setHasEnteredApp(false)}
                 />

@@ -8,7 +8,7 @@ Single-user app. No authentication in V1. Local state plus Supabase for data per
 ## Tech Stack
 - React (Vite): frontend UI
 - Supabase: database and data layer (PostgreSQL)
-- Claude API (claude-sonnet-4-20250514): AI product research and ingredient analysis
+- Claude API (claude-haiku-4-5-20251001): AI product research and ingredient analysis
 - EWG Skin Deep API: ingredient safety data
 - Vercel: deployment
 - Tailwind CSS: styling
@@ -26,7 +26,7 @@ Single-user app. No authentication in V1. Local state plus Supabase for data per
 - Do not use CSS other than Tailwind
 - Do not add features outside the current build phase without asking first
 - Do not create new components when an existing component in the component library covers the use case
-- Do not use any AI model other than claude-sonnet-4-20250514
+- Do not use any AI model other than claude-haiku-4-5-20251001
 - Always ask before creating a new component file. Confirm the name and location with me first
 - Do not proactively suggest or ask to commit/push to git. Wait until explicitly asked to commit or push
 

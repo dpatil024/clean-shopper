@@ -10,6 +10,7 @@ create table products (
   verdict text not null check (verdict in ('clean', 'caution', 'avoid')),
   note text not null,
   highlights text[] not null default '{}',
+  category text not null,
   created_at timestamptz not null default now()
 );
 

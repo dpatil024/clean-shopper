@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import ProductCard from './ProductCard'
 import SearchField from './SearchField'
 import { VERDICT_STYLES } from './VerdictBadge'
@@ -13,25 +12,17 @@ export default function LibraryPage({
   onToggleSave,
   onSelectProduct,
   onHome,
+  verdictFilter,
+  onVerdictFilterChange,
+  categoryFilter,
+  onCategoryFilterChange,
+  searchQuery,
+  onSearchQueryChange,
+  submittedQuery,
+  onSearchSubmit,
+  visibleProducts,
 }) {
-  const [verdictFilter, setVerdictFilter] = useState(null)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [submittedQuery, setSubmittedQuery] = useState('')
-
-  function handleVerdictClick(verdict) {
-    setVerdictFilter((current) => (current === verdict ? null : verdict))
-  }
-
-  const query = submittedQuery.trim().toLowerCase()
-
-  const visibleProducts = products.filter((product) => {
-    const matchesVerdict = !verdictFilter || product.verdict === verdictFilter
-    const matchesQuery =
-      !query ||
-      product.name.toLowerCase().includes(query) ||
-      product.brand.toLowerCase().includes(query)
-    return matchesVerdict && matchesQuery
-  })
+  const categories = [...new Set(products.map((product) => product.category))].sort()
 
   return (
     <div className="flex flex-col gap-10">
@@ -54,8 +45,8 @@ export default function LibraryPage({
           label="Search products"
           placeholder="Search products"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onSubmit={() => setSubmittedQuery(searchQuery)}
+          onChange={(e) => onSearchQueryChange(e.target.value)}
+          onSubmit={onSearchSubmit}
         />
       </header>
 
@@ -71,12 +62,34 @@ export default function LibraryPage({
 
       {!isLoading && !loadError && (
         <>
+          <div className="-mt-4 flex flex-wrap items-center gap-2 text-xs text-ink-soft">
+            Category
+            {categories.map((category) => {
+              const isActive = categoryFilter === category
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => onCategoryFilterChange(isActive ? null : category)}
+                  aria-pressed={isActive}
+                  className={`inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
+                    isActive
+                      ? 'border-ink bg-surface text-ink'
+                      : 'border-border-strong text-ink-soft hover:border-ink hover:text-ink'
+                  }`}
+                >
+                  {category}
+                </button>
+              )
+            })}
+          </div>
+
           {verdictFilter && (
             <div className="-mt-4 flex items-center gap-2 text-xs text-ink-soft">
               Filtering by
               <button
                 type="button"
-                onClick={() => setVerdictFilter(null)}
+                onClick={() => onVerdictFilterChange(null)}
                 className="inline-flex items-center gap-1.5 rounded-pill border border-border-strong px-2.5 py-1 font-medium text-ink hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
               >
                 {VERDICT_STYLES[verdictFilter].label}
@@ -100,7 +113,7 @@ export default function LibraryPage({
                 onAddToList={() => onToggleList(product.id)}
                 onSave={() => onToggleSave(product.id)}
                 onSelect={() => onSelectProduct(product.id)}
-                onVerdictClick={handleVerdictClick}
+                onVerdictClick={onVerdictFilterChange}
                 verdictFilterActive={verdictFilter === product.verdict}
               />
             ))}
@@ -108,8 +121,8 @@ export default function LibraryPage({
 
           {visibleProducts.length === 0 && (
             <p className="text-sm text-ink-soft">
-              {query
-                ? `No products match "${searchQuery}".`
+              {submittedQuery
+                ? `No products match "${submittedQuery}".`
                 : 'No products match that filter right now.'}
             </p>
           )}
