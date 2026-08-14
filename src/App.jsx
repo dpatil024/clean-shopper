@@ -78,6 +78,13 @@ function App() {
     setVerdictFilter((current) => (current === verdict ? null : verdict))
   }
 
+  function handleSearchQueryChange(value) {
+    setSearchQuery(value)
+    if (value === '') {
+      setSubmittedQuery('')
+    }
+  }
+
   const shoppingListProducts = products.filter((product) =>
     shoppingListIds.includes(product.id),
   )
@@ -161,7 +168,7 @@ function App() {
                   categoryFilter={categoryFilter}
                   onCategoryFilterChange={setCategoryFilter}
                   searchQuery={searchQuery}
-                  onSearchQueryChange={setSearchQuery}
+                  onSearchQueryChange={handleSearchQueryChange}
                   submittedQuery={submittedQuery}
                   onSearchSubmit={() => setSubmittedQuery(searchQuery)}
                   visibleProducts={visibleProducts}
