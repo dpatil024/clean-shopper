@@ -76,6 +76,7 @@ Deno.serve(async (req) => {
         max_tokens: MAX_TOKENS,
         system: systemPrompt,
         messages: messages.map((m) => ({ role: m.role, content: m.content })),
+        stream: true,
       }),
     })
 
@@ -89,11 +90,12 @@ Deno.serve(async (req) => {
       )
     }
 
-    const data = await anthropicResponse.json()
-    const reply = data.content?.[0]?.text ?? ''
-
-    return new Response(JSON.stringify({ reply }), {
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+    return new Response(anthropicResponse.body, {
+      headers: {
+        ...CORS_HEADERS,
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+      },
     })
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {

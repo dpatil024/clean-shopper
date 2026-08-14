@@ -7,6 +7,24 @@ function findMentionedProduct(reply, products) {
   return products.find((product) => reply.includes(product.name))
 }
 
+// Anthropic requires strict user/assistant alternation. Guard the payload
+// against malformed turns (e.g. a dropped role, or two same-role turns in a
+// row) by coercing every entry and merging adjacent same-role messages.
+function toApiMessages(uiMessages) {
+  const turns = []
+  for (const message of uiMessages) {
+    const role = message.role === 'assistant' ? 'assistant' : 'user'
+    if (!message.content) continue
+    const last = turns[turns.length - 1]
+    if (last && last.role === role) {
+      last.content += '\n\n' + message.content
+    } else {
+      turns.push({ role, content: message.content })
+    }
+  }
+  return turns
+}
+
 export default function ChatPage({
   products,
   contextProducts,
@@ -30,16 +48,33 @@ export default function ChatPage({
     setIsSending(true)
     setError(null)
 
+    let assistantIndex = null
+
     try {
       const productIds = isFiltered
         ? contextProducts.map((product) => product.id)
         : undefined
-      const reply = await sendChatMessage(nextMessages, productIds)
+
+      const reply = await sendChatMessage(toApiMessages(nextMessages), productIds, (accumulated) => {
+        setMessages((current) => {
+          if (assistantIndex === null) {
+            assistantIndex = current.length
+            return [...current, { role: 'assistant', content: accumulated }]
+          }
+          const updated = [...current]
+          updated[assistantIndex] = { ...updated[assistantIndex], content: accumulated }
+          return updated
+        })
+      })
+
       const mentionedProduct = findMentionedProduct(reply, products)
-      setMessages((current) => [
-        ...current,
-        { role: 'assistant', content: reply, product: mentionedProduct },
-      ])
+      if (assistantIndex !== null) {
+        setMessages((current) => {
+          const updated = [...current]
+          updated[assistantIndex] = { ...updated[assistantIndex], product: mentionedProduct }
+          return updated
+        })
+      }
     } catch (err) {
       setError(err.message)
     } finally {
@@ -89,7 +124,11 @@ export default function ChatPage({
             </div>
           ) : (
             <div key={index} className="flex flex-col items-start gap-3">
-              <p className="max-w-[70%] rounded-card border border-border bg-panel px-4 py-3 text-sm leading-relaxed text-ink">
+              <p
+                aria-live="polite"
+                aria-atomic="true"
+                className="max-w-[70%] rounded-card border border-border bg-panel px-4 py-3 text-sm leading-relaxed text-ink"
+              >
                 {message.content}
               </p>
               {message.product && (
@@ -109,7 +148,7 @@ export default function ChatPage({
           ),
         )}
 
-        {isSending && (
+        {isSending && messages[messages.length - 1]?.role !== 'assistant' && (
           <p className="text-sm text-ink-soft" role="status">
             Thinking…
           </p>
