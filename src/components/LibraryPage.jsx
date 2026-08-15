@@ -8,7 +8,9 @@ export default function LibraryPage({
   loadError,
   savedIds,
   shoppingListIds,
+  cartIds,
   onToggleList,
+  onToggleCart,
   onToggleSave,
   onSelectProduct,
   onHome,
@@ -35,7 +37,7 @@ export default function LibraryPage({
           >
             Clean Shopper
           </button>
-          <h1 className="font-display text-4xl leading-tight text-ink">
+          <h1 className="font-display text-h1 text-ink">
             Browse Products
           </h1>
         </div>
@@ -110,7 +112,9 @@ export default function LibraryPage({
                 note={product.note}
                 isSaved={savedIds.includes(product.id)}
                 isInList={shoppingListIds.includes(product.id)}
+                isInCart={cartIds.includes(product.id)}
                 onAddToList={() => onToggleList(product.id)}
+                onAddToCart={() => onToggleCart(product.id)}
                 onSave={() => onToggleSave(product.id)}
                 onSelect={() => onSelectProduct(product.id)}
                 onVerdictClick={onVerdictFilterChange}

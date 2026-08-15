@@ -18,7 +18,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
-      className={`rounded-md px-4 py-2.5 text-sm font-semibold transition-transform duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
+      className={`rounded-pill px-4 py-2.5 text-sm font-semibold transition-transform duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
         fullWidth ? 'w-full' : 'w-fit'
       } ${VARIANT_STYLES[variant]}`}
     >

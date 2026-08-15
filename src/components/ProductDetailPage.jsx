@@ -6,9 +6,11 @@ export default function ProductDetailPage({
   product,
   isSaved,
   isInList,
+  isInCart,
   onBack,
   onToggleList,
   onToggleSave,
+  onToggleCart,
 }) {
   return (
     <div className="flex flex-col gap-8">
@@ -63,20 +65,52 @@ export default function ProductDetailPage({
             </ul>
           )}
 
-          <div className="mt-2 max-w-xs">
+          <div className="mt-2 flex max-w-xs items-center gap-2">
             <Button
-              variant={isInList ? 'secondary' : 'primary'}
+              variant={isInCart ? 'secondary' : 'primary'}
               fullWidth
-              onClick={onToggleList}
+              onClick={onToggleCart}
             >
-              {isInList ? (
+              {isInCart ? (
                 <>
-                  <span aria-hidden="true">✓</span> Added to shopping list
+                  <span aria-hidden="true">✓</span> Added to cart
                 </>
               ) : (
-                'Add to shopping list'
+                'Add to cart'
               )}
             </Button>
+            <div className="flex-shrink-0">
+              <IconButton
+                icon={
+                  isInList ? (
+                    '✓'
+                  ) : (
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    >
+                      <circle cx="2" cy="4" r="1" fill="currentColor" stroke="none" />
+                      <line x1="5" y1="4" x2="14" y2="4" />
+                      <circle cx="2" cy="8" r="1" fill="currentColor" stroke="none" />
+                      <line x1="5" y1="8" x2="14" y2="8" />
+                      <circle cx="2" cy="12" r="1" fill="currentColor" stroke="none" />
+                      <line x1="5" y1="12" x2="14" y2="12" />
+                    </svg>
+                  )
+                }
+                label={
+                  isInList
+                    ? `Remove ${product.name} from shopping list`
+                    : `Add ${product.name} to shopping list`
+                }
+                onClick={onToggleList}
+              />
+            </div>
           </div>
         </div>
       </div>

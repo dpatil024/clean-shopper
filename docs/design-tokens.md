@@ -32,10 +32,13 @@ Clean Shopper needs the calm editorial base Seed uses, plus a clear 3-state sign
 | Token | Value | Role |
 |---|---|---|
 | `color-ink` | `#2E3B26` | primary text, headings, primary button bg — softer moss, less corporate than Seed's forest |
+| `color-ink-soft` | `#5B6650` | secondary ink — card note text, category filter chip labels; lighter than `color-ink` but still darker/more legible than `color-muted` |
 | `color-base` (code: `color-cream`) | `#FBF6EC` | page background — warm, buttery cream. Renamed to `cream` in `src/index.css` to avoid colliding with Tailwind's built-in `text-base` font-size utility |
 | `color-surface` | `#F3EDE0` | card / secondary surface background — warm oat |
+| `color-panel` | `#FFFDF8` | raised panel background — product cards, icon buttons on photo, search field; near-white, lighter than `color-surface` |
 | `color-border` | `#E4DBC8` | hairline borders — warm sand |
-| `color-accent` | `#E8B34A` | single accent — honey/amber, used for badges and highlights (not focus rings — see §7 a11y notes) |
+| `color-border-strong` | `#D3C6A9` | heavier borders — category filter chips, search field (`border-width-input`), secondary button outline |
+| `color-accent` | `#E8B34A` | single accent — honey/amber, used for badges and highlights (not focus rings — see §7 a11y notes; not button fills — primary buttons are `color-ink`, see §"Component notes" below) |
 | `color-muted` | `#6E6448` | secondary text, captions, labels — warm taupe, darkened from an earlier `#8B8064` draft to clear 4.5:1 at small sizes |
 | `color-overlay` | `rgba(90, 82, 62, 0.32)` | scrims over imagery |
 | `color-clean` | `#52713F` | "clean" ingredient verdict — soft sage, calm rather than saturated |
@@ -167,6 +170,11 @@ Respect `prefers-reduced-motion` throughout.
 - No dark-mode palette defined yet in code — the visual explorations in `docs/design/` sketch one (`prefers-color-scheme` + `data-theme` overrides) but `src/index.css` only defines the light values. Add if/when dark mode becomes a requirement.
 - `font-family-display` and `font-family-base` are system-stack stand-ins; swap for licensed or self-hosted variable fonts (a warm serif + humanist sans) when chosen.
 - Motion tokens (§8) are documented but not yet wired into Tailwind's `@theme` — `ProductCard.jsx` uses Tailwind's default `duration-300`/`ease-out` rather than the `400ms`/`cubic-bezier(0.2,0,0,1)` values specified above. Reconcile when more components need consistent motion.
+- **The type scale (§2) is now wired into Tailwind's `@theme`** (`--text-display`/`h1`/`h2`/`h3`/`h4`/`body`/`label`/`caption`, each with matching line-height/letter-spacing) — fixed 2026-08-15 after a design-system audit found headings were rendering at Tailwind's stock sizes instead (e.g. page `<h1>`s at `text-4xl`/36px vs. the spec'd `text-h1`/40px). Page-level `<h1>`s (`LibraryPage`, `ShoppingListPage`, `PreferencesPage`, `ComparePage`, `ChatPage`) were switched from `text-4xl` to `text-h1`. Not yet fully reconciled: `ProductDetailPage`'s `<h1>` (`text-3xl`), `AssistantProductCard`/`LandingPage`'s `<h2>`s (`text-2xl`/`text-xl`), and most `text-xs`/`text-sm` body/label/caption usages across components still use Tailwind's stock scale rather than the new `text-body`/`text-label`/`text-caption` tokens — audit and migrate opportunistically as those components are touched.
+
+### Component notes
+
+- `Button`'s `primary` variant (`src/components/Button.jsx`) uses `bg-accent text-ink` at `rounded-pill`. A 2026-08-15 audit flagged this against §1's `color-accent` usage note (badges/highlights, not button fills) and against `component-spec.md`'s "solid ink fill" description of `primary`, and briefly changed it to `bg-ink text-cream`. Reverted the same day at the user's request — the honey/accent fill is the intended look for primary CTAs (Add to cart, Add to shopping list, chat send, landing page CTA), so treat `component-spec.md`'s "solid ink fill" line and §1's accent-usage note as the stale ones; `Button.jsx` is the source of truth here. The pill radius fix (`rounded-md` → `rounded-pill`) was not reverted and still stands.
 
 ## 10. Where this lives in code
 

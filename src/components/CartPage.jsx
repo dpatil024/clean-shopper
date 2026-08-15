@@ -1,6 +1,6 @@
 import ShoppingListItem from './ShoppingListItem'
 
-export default function ShoppingListPage({ items, onRemove, onHome }) {
+export default function CartPage({ items, onRemove, onHome }) {
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-2">
@@ -11,9 +11,7 @@ export default function ShoppingListPage({ items, onRemove, onHome }) {
         >
           Clean Shopper
         </button>
-        <h1 className="font-display text-h1 text-ink">
-          Shopping list
-        </h1>
+        <h1 className="font-display text-h1 text-ink">Cart</h1>
       </header>
 
       {items.length > 0 ? (
@@ -32,7 +30,7 @@ export default function ShoppingListPage({ items, onRemove, onHome }) {
         </ul>
       ) : (
         <p className="text-sm text-ink-soft">
-          Nothing here yet — add products from your library or a comparison.
+          Nothing in your cart yet — add products from your library or a comparison.
         </p>
       )}
     </div>

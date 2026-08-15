@@ -11,7 +11,9 @@ export default function ProductCard({
   note,
   isSaved,
   isInList,
+  isInCart,
   onAddToList,
+  onAddToCart,
   onSave,
   onSelect,
   onVerdictClick,
@@ -60,20 +62,52 @@ export default function ProductCard({
 
         {note && <p className="text-xs leading-relaxed text-ink-soft">{note}</p>}
 
-        <div className="pointer-events-auto relative z-10 mt-auto">
+        <div className="pointer-events-auto relative z-10 mt-auto flex items-center gap-2">
           <Button
-            variant={isInList ? 'secondary' : 'primary'}
+            variant={isInCart ? 'secondary' : 'primary'}
             fullWidth
-            onClick={onAddToList}
+            onClick={onAddToCart}
           >
-            {isInList ? (
+            {isInCart ? (
               <>
-                <span aria-hidden="true">✓</span> Added to shopping list
+                <span aria-hidden="true">✓</span> Added to cart
               </>
             ) : (
-              'Add to shopping list'
+              'Add to cart'
             )}
           </Button>
+          <div className="flex-shrink-0">
+            <IconButton
+              icon={
+                isInList ? (
+                  '✓'
+                ) : (
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  >
+                    <circle cx="2" cy="4" r="1" fill="currentColor" stroke="none" />
+                    <line x1="5" y1="4" x2="14" y2="4" />
+                    <circle cx="2" cy="8" r="1" fill="currentColor" stroke="none" />
+                    <line x1="5" y1="8" x2="14" y2="8" />
+                    <circle cx="2" cy="12" r="1" fill="currentColor" stroke="none" />
+                    <line x1="5" y1="12" x2="14" y2="12" />
+                  </svg>
+                )
+              }
+              label={
+                isInList
+                  ? `Remove ${name} from shopping list`
+                  : `Add ${name} to shopping list`
+              }
+              onClick={onAddToList}
+            />
+          </div>
         </div>
       </div>
     </article>

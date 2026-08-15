@@ -25,7 +25,7 @@ export default function PreferencesPage({ onHome }) {
         >
           Clean Shopper
         </button>
-        <h1 className="font-display text-4xl leading-tight text-ink">
+        <h1 className="font-display text-h1 text-ink">
           Your preferences
         </h1>
       </header>

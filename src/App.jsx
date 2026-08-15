@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import LandingPage from './components/LandingPage'
 import LibraryPage from './components/LibraryPage'
 import ShoppingListPage from './components/ShoppingListPage'
+import CartPage from './components/CartPage'
 import PreferencesPage from './components/PreferencesPage'
 import ComparePage from './components/ComparePage'
 import ChatPage from './components/ChatPage'
@@ -11,6 +12,7 @@ import { fetchProducts } from './lib/api/products'
 const NAV_ITEMS = [
   { id: 'library', label: 'Product library' },
   { id: 'shopping-list', label: 'Shopping list' },
+  { id: 'cart', label: 'Cart' },
   { id: 'preferences', label: 'Preferences' },
   { id: 'compare', label: 'Compare' },
   { id: 'assistant', label: 'Ask Clean Shopper' },
@@ -20,6 +22,7 @@ function App() {
   const [hasEnteredApp, setHasEnteredApp] = useState(false)
   const [activePage, setActivePage] = useState('library')
   const [shoppingListIds, setShoppingListIds] = useState([])
+  const [cartIds, setCartIds] = useState([])
   const [savedIds, setSavedIds] = useState([])
   const [selectedProductId, setSelectedProductId] = useState(null)
   const [products, setProducts] = useState([])
@@ -61,6 +64,18 @@ function App() {
     setShoppingListIds((current) => current.filter((id) => id !== productId))
   }
 
+  function handleToggleCart(productId) {
+    setCartIds((current) =>
+      current.includes(productId)
+        ? current.filter((id) => id !== productId)
+        : [...current, productId],
+    )
+  }
+
+  function handleRemoveFromCart(productId) {
+    setCartIds((current) => current.filter((id) => id !== productId))
+  }
+
   function handleToggleSave(productId) {
     setSavedIds((current) =>
       current.includes(productId)
@@ -88,6 +103,7 @@ function App() {
   const shoppingListProducts = products.filter((product) =>
     shoppingListIds.includes(product.id),
   )
+  const cartProducts = products.filter((product) => cartIds.includes(product.id))
   const selectedProduct = products.find((p) => p.id === selectedProductId)
 
   const query = submittedQuery.trim().toLowerCase()
@@ -133,6 +149,11 @@ function App() {
                     ({shoppingListIds.length})
                   </span>
                 )}
+                {item.id === 'cart' && cartIds.length > 0 && (
+                  <span className="ml-1.5 text-xs text-muted">
+                    ({cartIds.length})
+                  </span>
+                )}
               </button>
             )
           })}
@@ -146,9 +167,11 @@ function App() {
               product={selectedProduct}
               isSaved={savedIds.includes(selectedProduct.id)}
               isInList={shoppingListIds.includes(selectedProduct.id)}
+              isInCart={cartIds.includes(selectedProduct.id)}
               onBack={() => setSelectedProductId(null)}
               onToggleList={() => handleToggleList(selectedProduct.id)}
               onToggleSave={() => handleToggleSave(selectedProduct.id)}
+              onToggleCart={() => handleToggleCart(selectedProduct.id)}
             />
           ) : (
             <>
@@ -159,7 +182,9 @@ function App() {
                   loadError={loadError}
                   savedIds={savedIds}
                   shoppingListIds={shoppingListIds}
+                  cartIds={cartIds}
                   onToggleList={handleToggleList}
+                  onToggleCart={handleToggleCart}
                   onToggleSave={handleToggleSave}
                   onSelectProduct={setSelectedProductId}
                   onHome={() => setHasEnteredApp(false)}
@@ -178,6 +203,13 @@ function App() {
                 <ShoppingListPage
                   items={shoppingListProducts}
                   onRemove={handleRemoveFromList}
+                  onHome={() => setHasEnteredApp(false)}
+                />
+              )}
+              {activePage === 'cart' && (
+                <CartPage
+                  items={cartProducts}
+                  onRemove={handleRemoveFromCart}
                   onHome={() => setHasEnteredApp(false)}
                 />
               )}

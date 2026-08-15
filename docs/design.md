@@ -2,7 +2,7 @@
 
 Single entry point for "what does the Clean Shopper design system look like and why." This doc is an overview and index — the detailed source of truth for each piece lives in the files it links to. If this doc and a linked file disagree, the linked file wins; update this page to match rather than the other way around.
 
-**Status note:** §3 and §4 below describe an earlier point in the project (still true directionally, stale on specifics — e.g. §3 says "currently one component is built," which is no longer accurate). For the actual current state, treat **[component-spec.md](component-spec.md)**'s inventory table and **`src/`** itself as the source of truth. The app now has four real pages (browse, shopping list, preferences, compare) plus a product detail view, a working Supabase backend (`supabase/`), and is deployed at both GitHub Pages and Vercel. §8 below has the most recent decision.
+**Status note:** §3 and §4 below describe an earlier point in the project (still true directionally, stale on specifics — e.g. §3 says "currently one component is built," which is no longer accurate). For the actual current state, treat **[component-spec.md](component-spec.md)**'s inventory table and **`src/`** itself as the source of truth. The app now has six real pages (landing, browse/library, shopping list, cart, preferences, compare) plus a product detail view and an AI assistant chat page, a working Supabase backend (`supabase/`), and is deployed at both GitHub Pages and Vercel. §8 below covers the landing page (built); this note covers everything since.
 
 ---
 
@@ -30,9 +30,13 @@ Currently one component is built: **`ProductCard`** ([src/components/ProductCard
 
 `VerdictBadge`, `Button`, `IconButton`, and `SearchField` are also built — extracted as shared primitives so `ProductCard` doesn't duplicate them. `PreferenceTag`, `PreferencesPanel`, `ShoppingListItem`, and `CompareCard` are built too, but as a first pass with no comparison exploration behind them (unlike `ProductCard`'s two rounds of variant testing) — treat their current layout as provisional. See `component-spec.md`'s "Component inventory" table for status and the "first-pass design" note for what that provisional flag actually means.
 
+**Cart feature (added 2026-08-15):** `ProductCard` and `ProductDetailPage` each pair two actions below the photo — a full-width `Button` "Add to cart" CTA (solid honey/accent fill, the primary purchase-intent action) plus a small icon-only `IconButton` for the shopping list (a bulleted-list glyph that swaps to a checkmark once added), sized and styled like the existing save/heart icon so it reads as a lightweight secondary utility rather than a second CTA. Two pairing options were mocked up before building; this icon-beside-primary-CTA layout was the one picked. `IconButton`'s `icon` prop now accepts an inline SVG node in addition to plain characters (previously ♡/×/✓ only) — still no external icon library, per `component-spec.md`'s constraint. A new `CartPage` (mirrors `ShoppingListItem`/`ShoppingListPage`'s pattern) and a `Cart` nav item with a live count badge were added to `App.jsx` alongside the existing Shopping list — the two are deliberately separate concepts (cart = ready to buy now, shopping list = a running list), tracked as independent state.
+
 ## 4. Pages
 
 **Browse page** (`src/App.jsx`): header with a search field, 3-column grid of `ProductCard`. This is "Variant 1 — Simple grid" from the Grove-card page comparison, picked **tentatively** — flagged for revisit once more of the product exists and it's clearer whether Variant 2's filtering or Variant 3's verdict-grouping is actually needed. See `component-spec.md` for the other two variants and why they weren't picked (yet).
+
+**Other pages built since:** Shopping list, Cart (added 2026-08-15, see §3), Preferences, Compare, a product detail view, and an AI assistant chat page all exist in `src/components/` and are wired into `App.jsx`'s nav-tab switcher — see `component-spec.md`'s "page-level components" note and `src/App.jsx`'s `NAV_ITEMS` directly, since this doc doesn't itemize each one.
 
 ## 5. How decisions got made
 
@@ -49,20 +53,18 @@ Full chronological detail of the first session: **[session-log-2026-08-01.md](se
 - Browse page layout (§4) is provisional — Variant 2 (filters) or Variant 3 (verdict grouping) may replace it once there's more real data to browse.
 - No dark-mode token values in code yet (the HTML explorations sketch one; `src/index.css` doesn't).
 - `font-family-display`/`font-family-base` are system-font stand-ins for a warm serif + humanist sans; no licensed/self-hosted fonts chosen yet.
+- **Resolved 2026-08-15:** `Button`'s `primary` fill color was briefly changed from honey/accent to solid ink during a design-system audit (to match `color-accent`'s "not for button fills" usage note), then reverted at the user's explicit request — the honey fill is the intended look for primary CTAs app-wide. See `design-tokens.md` §9 "Component notes" for the full history; `component-spec.md`'s `Button` entry now matches.
 
-## 8. Next up: landing page
+## 8. Landing page
 
-A marketing/landing page (before the app itself) doesn't exist yet — the app currently starts straight at the browse page, no auth, single-user. Four directions were compared in **[design/landing-page-variants.html](design/landing-page-variants.html)**, all built from the existing tokens and the Grove-style verdict system (no new visual language introduced):
+A marketing/landing page (before the app itself) — the app previously started straight at the browse page, no auth, single-user. Four directions were compared in **[design/landing-page-variants.html](design/landing-page-variants.html)**, all built from the existing tokens and the Grove-style verdict system (no new visual language introduced):
 
 1. **Calm & classic** — centered hero, direct headline + subhead + two CTAs, three numbered value props.
-2. **Editorial** — ✅ **Picked.** Asymmetric hero (headline + supporting image side by side), a 3-step "how it works" sequence, and a pull-quote reframing "Worth a closer look" as reassurance rather than a warning. Matches the project's established warm/reassuring tone (see §1) more directly than the other three.
-3. **Product-forward** — leads with real-looking product cards instead of describing the product abstractly.
-4. **Trust-led** — leads with the verdict system itself as the pitch.
+2. **Editorial** — ✅ **Picked and built.** Asymmetric hero (headline + supporting image side by side), a 3-step "how it works" sequence, and a pull-quote reframing "Worth a closer look" as reassurance rather than a warning. Matches the project's established warm/reassuring tone (see §1) more directly than the other three.
+3. **Product-forward** — leads with real-looking product cards instead of describing the product abstractly. Not built.
+4. **Trust-led** — leads with the verdict system itself as the pitch. Not built.
 
-**Not yet built** — this is the next task. Whoever picks this up needs to:
-- Create a new page/component (likely `LandingPage.jsx` — confirm name/location with the user first, per `CLAUDE.md`'s component-creation rule) implementing the Editorial direction's structure and copy from the artifact above.
-- Decide how it fits into `App.jsx`'s current nav-tab page-switching pattern — a landing page is a different kind of "page" than Library/Shopping List/etc. (no nav, its own CTA leads into the app), so this may need its own top-level routing decision rather than just becoming a fifth `NAV_ITEMS` entry.
-- Run `/a11y-check` before calling it done, per the standing project instruction in `CLAUDE.md`.
+**Built** as `src/components/LandingPage.jsx`, implementing the Editorial direction. It sits outside `App.jsx`'s nav-tab page-switching pattern — a `hasEnteredApp` flag gates the whole app, and the landing page's own CTA ("Start browsing →") is what flips it, rather than being a `NAV_ITEMS` entry.
 
 ## 9. Where everything lives
 
@@ -72,6 +74,7 @@ A marketing/landing page (before the app itself) doesn't exist yet — the app c
 | Tokens (code) | [src/index.css](../src/index.css) |
 | Components (doc) | [component-spec.md](component-spec.md) |
 | Built component | [src/components/ProductCard.jsx](../src/components/ProductCard.jsx) |
+| Cart page (added 2026-08-15) | [src/components/CartPage.jsx](../src/components/CartPage.jsx) |
 | Built page | [src/App.jsx](../src/App.jsx) |
 | Accessibility skill | [.claude/skills/a11y-check/SKILL.md](../.claude/skills/a11y-check/SKILL.md) |
 | Visual explorations (static snapshots) | [design/](design/) |

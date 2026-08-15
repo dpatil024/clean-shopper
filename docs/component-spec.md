@@ -103,7 +103,7 @@ Both variants render the same label text for the given verdict — single source
 
 | Prop | Type | Notes |
 |---|---|---|
-| `variant` | `'primary' \| 'secondary' \| 'ghost'` | `primary` = solid ink fill, `secondary` = outlined, `ghost` = underlined text-only. Only `primary` has been used in a real layout (`ProductCard`'s CTA) so far — `secondary`/`ghost` are implemented but unvalidated in context |
+| `variant` | `'primary' \| 'secondary' \| 'ghost'` | `primary` = solid honey/accent fill (`bg-accent text-ink`), `secondary` = outlined, `ghost` = underlined text-only. Used in `ProductCard`'s cart CTA, `ProductDetailPage`, `ChatPage`'s send button, and the landing page CTA — `secondary`/`ghost` are implemented but less validated in context |
 | `fullWidth` | boolean | default `false` |
 | `children` | node | button label |
 | `onClick` | function | |
